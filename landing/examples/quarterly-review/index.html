@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quarterly Revenue Review &mdash; Examples &mdash; agent-slides</title>
+    <meta name="description" content="A 5-slide quarterly revenue review generated from a single prompt. KPIs, bar chart, data table, and line chart." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../style.css" />
+    <link rel="icon" href="../../favicon.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <a href="#main" class="skip-link">Skip to content</a>
+
+    <nav>
+      <div class="nav-inner">
+        <a href="/" class="logo">agent-<span class="accent">slides</span></a>
+        <div class="nav-links">
+          <a href="/docs">Docs</a>
+          <a href="/examples" class="active">Examples</a>
+          <a href="/notes">Notes</a>
+          <a href="https://pypi.org/project/agent-slides/" class="nav-cta">PyPI</a>
+        </div>
+        <button class="mobile-toggle" aria-label="Menu" aria-expanded="false" onclick="this.setAttribute('aria-expanded',this.getAttribute('aria-expanded')==='false'?'true':'false');document.querySelector('.nav-links').classList.toggle('open')">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 5h14M3 10h14M3 15h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+    </nav>
+
+    <main id="main">
+    <div class="article">
+      <div class="container">
+        <div class="article-header">
+          <span class="label">Example &mdash; 5 content slides</span>
+          <h1>Quarterly revenue review.</h1>
+          <p class="section-sub">A compact board-level update covering ARR growth, segment bookings, regional quota attainment, NRR trends, and Q4 investment priorities.</p>
+        </div>
+
+        <div class="article-layout">
+          <div class="prose">
+
+            <h2 id="prompt">The prompt</h2>
+
+            <pre><code>Create a 5-slide quarterly revenue review for the Board of Directors using /slides-full.
+
+Audience: Board of Directors, CEO, CFO.
+Tone: Concise executive update (data-forward, KPI-driven).
+Scope: ARR growth ($127M, +34% YoY), segment bookings breakdown,
+regional quota attainment, net revenue retention trends,
+Q4 investment priorities.
+
+Use a bar chart for segment bookings, a line chart for NRR trend,
+and a data table for regional performance. Include big-number callouts
+for headline KPIs and source lines on every data slide.</code></pre>
+
+            <h2 id="template">Template</h2>
+
+            <p>Source: <a href="https://powerpoint.cloud.microsoft/create/en/presentation-templates/">Microsoft free template gallery</a> &mdash; a nature-themed 16:9 template with 52 layouts, earthy tones (accent colors: <code>#A57361</code>, <code>#4E6C67</code>, <code>#CD9979</code>), and photo-driven cover slides.</p>
+
+            <h2 id="result">What the agent built</h2>
+
+            <table>
+              <thead><tr><th>Metric</th><th>Value</th></tr></thead>
+              <tbody>
+                <tr><td>Pipeline iterations</td><td>1 global, 0 local fixes</td></tr>
+                <tr><td>Content slides</td><td>5</td></tr>
+                <tr><td>Total slides</td><td>8 (title + 5 content + disclaimer + end)</td></tr>
+                <tr><td>Operations</td><td>109</td></tr>
+                <tr><td>Charts</td><td>2 (bar chart, line chart)</td></tr>
+                <tr><td>Tables</td><td>1 (regional performance)</td></tr>
+                <tr><td>Total shapes</td><td>87</td></tr>
+                <tr><td>QA status</td><td>Passed (0 validation errors, 33 warnings)</td></tr>
+              </tbody>
+            </table>
+
+            <p>
+              <a href="files/output.pptx" download>Download the .pptx</a> &nbsp;&middot;&nbsp;
+              <a href="files/slides.json" download>Download slides.json</a>
+            </p>
+
+            <h2 id="slides">Slide-by-slide</h2>
+
+            <ol>
+              <li>
+                <strong>Title</strong><br />
+                <span style="color:var(--muted);font-size:0.88rem">Q3 FY26 Quarterly Revenue Review</span>
+              </li>
+              <li>
+                <strong>KPI Dashboard</strong> &mdash; big_number<br />
+                <span style="color:var(--muted);font-size:0.88rem">$127M ARR (+34%), 118% NRR, $42M bookings &mdash; with highlight cards and Q3 bullets</span>
+              </li>
+              <li>
+                <strong>Segment Bookings</strong> &mdash; bar_chart<br />
+                <span style="color:var(--muted);font-size:0.88rem">Enterprise $21.8M, Mid-Market $10.5M, SMB $5.9M, Channel $3.8M + YoY growth callouts</span>
+              </li>
+              <li>
+                <strong>Regional Attainment</strong> &mdash; table<br />
+                <span style="color:var(--muted);font-size:0.88rem">Americas 112%, EMEA 107%, APAC 95% + commentary</span>
+              </li>
+              <li>
+                <strong>NRR Trend</strong> &mdash; line_chart<br />
+                <span style="color:var(--muted);font-size:0.88rem">108% &rarr; 118% over 6 quarters + driver cards (expansion, churn, contraction)</span>
+              </li>
+              <li>
+                <strong>Q4 Priorities</strong> &mdash; content_bullets<br />
+                <span style="color:var(--muted);font-size:0.88rem">Three-card layout: APAC GTM, Mid-Market Engine, Platform Investment</span>
+              </li>
+              <li><span style="color:var(--muted);font-size:0.88rem">Disclaimer &mdash; confidentiality notice</span></li>
+              <li><span style="color:var(--muted);font-size:0.88rem">End &mdash; Thank You / Q&amp;A</span></li>
+            </ol>
+
+            <h2 id="screenshots">Screenshots</h2>
+
+            <p>Selected slides rendered from the generated <code>.pptx</code>:</p>
+
+            <div class="slide-gallery">
+              <figure>
+                <img src="screenshots/slide_002.png" alt="KPI Dashboard slide showing $127M ARR, 118% NRR, $42M bookings" loading="lazy" />
+                <figcaption>Slide 2 &mdash; KPI Dashboard</figcaption>
+              </figure>
+              <figure>
+                <img src="screenshots/slide_003.png" alt="Bar chart showing segment bookings by Enterprise, Mid-Market, SMB, Channel" loading="lazy" />
+                <figcaption>Slide 3 &mdash; Segment Bookings</figcaption>
+              </figure>
+              <figure>
+                <img src="screenshots/slide_004.png" alt="Table showing regional quota attainment for Americas, EMEA, APAC" loading="lazy" />
+                <figcaption>Slide 4 &mdash; Regional Attainment</figcaption>
+              </figure>
+              <figure>
+                <img src="screenshots/slide_005.png" alt="Line chart showing NRR trend from 108% to 118% over six quarters" loading="lazy" />
+                <figcaption>Slide 5 &mdash; NRR Trend</figcaption>
+              </figure>
+            </div>
+
+            <h2 id="archetypes">Archetypes used</h2>
+
+            <table>
+              <thead><tr><th>Archetype</th><th>Count</th><th>Purpose</th></tr></thead>
+              <tbody>
+                <tr><td><code>title_slide</code></td><td>1</td><td>Cover</td></tr>
+                <tr><td><code>big_number</code></td><td>1</td><td>Headline KPI callout</td></tr>
+                <tr><td><code>bar_chart</code></td><td>1</td><td>Segment comparison</td></tr>
+                <tr><td><code>table</code></td><td>1</td><td>Regional data</td></tr>
+                <tr><td><code>line_chart</code></td><td>1</td><td>Trend over time</td></tr>
+                <tr><td><code>content_bullets</code></td><td>1</td><td>Recommendation</td></tr>
+                <tr><td><code>disclaimer</code></td><td>1</td><td>Legal</td></tr>
+                <tr><td><code>end_slide</code></td><td>1</td><td>Close</td></tr>
+              </tbody>
+            </table>
+
+            <h2 id="reproduce">Reproduce it</h2>
+
+            <pre><code><span class="c"># 1. Download the template from Microsoft</span>
+
+<span class="c"># 2. Extract</span>
+/slides-extract example1.pptx
+
+<span class="c"># 3. Build (paste the prompt above)</span>
+/slides-full "5-slide quarterly revenue review ..."
+
+<span class="c"># Or render from the JSON directly</span>
+slides render \
+  --slides-json @slides.json \
+  --profile design-profile.json \
+  --output output.pptx</code></pre>
+
+            <div class="article-nav">
+              <div></div>
+              <a href="/examples/project-aurora" class="article-nav-next">
+                <span class="article-nav-label">Next example</span>
+                <span class="article-nav-title">Product launch strategy &rarr;</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="toc">
+            <div class="toc-title">On this page</div>
+            <a href="#prompt">The prompt</a>
+            <a href="#template">Template</a>
+            <a href="#result">What was built</a>
+            <a href="#slides">Slide-by-slide</a>
+            <a href="#screenshots">Screenshots</a>
+            <a href="#archetypes">Archetypes used</a>
+            <a href="#reproduce">Reproduce it</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    </main>
+
+    <footer>
+      <div class="container footer-inner">
+        <div class="footer-left">
+          <span class="logo">agent-<span class="accent">slides</span></span>
+          <p>An agent skill for PowerPoint generation.<br />Open-source. Python 3.12+.</p>
+        </div>
+        <div class="footer-links">
+          <div class="footer-col">
+            <div class="footer-col-title">Learn</div>
+            <a href="/docs">Docs</a>
+            <a href="/examples">Examples</a>
+            <a href="/notes">Notes</a>
+          </div>
+          <div class="footer-col">
+            <div class="footer-col-title">Links</div>
+            <a href="https://pypi.org/project/agent-slides/">PyPI</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+  </body>
+</html>

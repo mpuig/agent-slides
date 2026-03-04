@@ -1,0 +1,322 @@
+{
+  "plan": {
+    "deck_title": "Project Aurora: AI-Powered Customer Service Platform Launch",
+    "brief": "Product strategy and go-to-market plan for Aurora, an AI-powered customer service platform that reduces resolution time by 45% and improves CSAT by 12 points. Covers market opportunity, product differentiation, revenue model, and phased launch plan.",
+    "audience": "Executive leadership and board of directors",
+    "objective": "Secure approval and funding for Aurora's go-to-market launch in Q1 2026",
+    "slides": [
+      {
+        "slide_number": 1,
+        "story_role": "opener",
+        "archetype_id": "title_slide",
+        "action_title": "Project Aurora: AI-Powered Customer Service"
+      },
+      {
+        "slide_number": 2,
+        "story_role": "context",
+        "archetype_id": "executive_summary",
+        "action_title": "Aurora reduces resolution time by 45% while improving CSAT by 12 points",
+        "key_points": [
+          "$31B market growing at 24% CAGR",
+          "$4.2B addressable opportunity from three unmet needs",
+          "Year 1 target: $18M ARR across 200 enterprise accounts"
+        ]
+      },
+      {
+        "slide_number": 3,
+        "story_role": "section_break",
+        "archetype_id": "section_divider",
+        "action_title": "Market Opportunity"
+      },
+      {
+        "slide_number": 4,
+        "story_role": "evidence",
+        "archetype_id": "chart_bar",
+        "action_title": "Customer service AI market will reach $31B by 2027, growing at 24% CAGR",
+        "key_points": [
+          "Market grew from $8B in 2022 to projected $31B in 2027",
+          "Conversational AI and sentiment analysis are fastest-growing segments"
+        ],
+        "source_note": "Source: Gartner, AI in Customer Service Forecast, 2023"
+      },
+      {
+        "slide_number": 5,
+        "story_role": "evidence",
+        "archetype_id": "three_column",
+        "action_title": "Three unmet needs create a $4.2B addressable opportunity for Aurora",
+        "key_points": [
+          "Real-time sentiment analysis ($1.8B)",
+          "Autonomous resolution ($1.6B)",
+          "Omnichannel integration ($0.8B)"
+        ],
+        "source_note": "Source: Internal market sizing, McKinsey Digital 2024"
+      },
+      {
+        "slide_number": 6,
+        "story_role": "section_break",
+        "archetype_id": "section_divider",
+        "action_title": "Product & Differentiation"
+      },
+      {
+        "slide_number": 7,
+        "story_role": "evidence",
+        "archetype_id": "two_column_icons",
+        "action_title": "Aurora combines real-time sentiment analysis with autonomous resolution — two capabilities no competitor offers together",
+        "key_points": [
+          "Sentiment analysis: 94% accuracy in real-time",
+          "Autonomous resolution: 65% of L1 tickets resolved without human",
+          "Omnichannel: unified context across chat, email, voice, social"
+        ]
+      },
+      {
+        "slide_number": 8,
+        "story_role": "evidence",
+        "archetype_id": "table_comparison",
+        "action_title": "Feature comparison confirms Aurora leads in 5 of 7 critical capabilities",
+        "key_points": [
+          "Aurora leads in sentiment, autonomy, omnichannel, analytics, and security",
+          "Parity in NLP accuracy",
+          "Competitor A leads only in ecosystem integrations"
+        ],
+        "source_note": "Source: Competitive analysis, Q3 2025"
+      },
+      {
+        "slide_number": 9,
+        "story_role": "evidence",
+        "archetype_id": "chart_pie",
+        "action_title": "Subscription model captures 73% of revenue, ensuring predictable growth",
+        "key_points": [
+          "Subscription: 73%",
+          "Professional services: 15%",
+          "Usage-based add-ons: 12%"
+        ]
+      },
+      {
+        "slide_number": 10,
+        "story_role": "action",
+        "archetype_id": "process_flow",
+        "action_title": "Go-to-market follows a three-phase approach: design partners, segment expansion, full launch",
+        "key_points": [
+          "Phase 1 (Q1-Q2): 15 design partners, product-market fit validation",
+          "Phase 2 (Q3): Expand to mid-market segment, 100 accounts",
+          "Phase 3 (Q4): Full launch, enterprise sales motion, 200 accounts"
+        ]
+      },
+      {
+        "slide_number": 11,
+        "story_role": "action",
+        "archetype_id": "big_number_kpi",
+        "action_title": "Year 1 targets: $18M ARR, 200 enterprise accounts, 92% retention",
+        "key_points": [
+          "$18M ARR by end of Year 1",
+          "200 enterprise accounts signed",
+          "92% net retention rate"
+        ]
+      },
+      {
+        "slide_number": 12,
+        "story_role": "closer",
+        "archetype_id": "disclaimer",
+        "action_title": "Disclaimer"
+      },
+      {
+        "slide_number": 13,
+        "story_role": "closer",
+        "archetype_id": "end_slide",
+        "action_title": "Thank You"
+      }
+    ]
+  },
+  "ops": {
+    "operations": [
+      {"op": "set_core_properties", "title": "Project Aurora: AI-Powered Customer Service Platform Launch", "author": "Strategy Team", "subject": "Product Strategy & Go-to-Market Plan"},
+
+      {"op": "add_slide", "layout_name": "Title 1"},
+      {"op": "set_title_subtitle", "slide_index": 0, "title": "Project Aurora:\nAI-Powered Customer Service", "subtitle": "Product Strategy & Go-to-Market Plan | November 2025"},
+
+      {"op": "add_slide", "layout_name": "Agenda"},
+      {"op": "set_semantic_text", "slide_index": 1, "role": "title", "text": "Aurora reduces resolution time by 45% while improving CSAT by 12 points"},
+      {"op": "set_semantic_text", "slide_index": 1, "role": "body", "text": " "},
+      {"op": "add_rounded_rectangle", "slide_index": 1, "left": 0.47, "top": 2.7, "width": 5.8, "height": 1.1, "fill_color": "A57361"},
+      {"op": "add_text", "slide_index": 1, "text": "45% faster resolution", "left": 0.67, "top": 2.8, "width": 5.4, "height": 0.4, "font_size": 18, "bold": true, "font_color": "FFFFFF"},
+      {"op": "add_text", "slide_index": 1, "text": "Average handle time drops from 11 min to 6 min", "left": 0.67, "top": 3.25, "width": 5.4, "height": 0.4, "font_size": 12, "font_color": "FFFFFF"},
+      {"op": "add_rounded_rectangle", "slide_index": 1, "left": 0.47, "top": 4.0, "width": 5.8, "height": 1.1, "fill_color": "4E6C67"},
+      {"op": "add_text", "slide_index": 1, "text": "+12 points CSAT improvement", "left": 0.67, "top": 4.1, "width": 5.4, "height": 0.4, "font_size": 18, "bold": true, "font_color": "FFFFFF"},
+      {"op": "add_text", "slide_index": 1, "text": "Customer satisfaction rises from 72 to 84", "left": 0.67, "top": 4.55, "width": 5.4, "height": 0.4, "font_size": 12, "font_color": "FFFFFF"},
+      {"op": "add_rounded_rectangle", "slide_index": 1, "left": 0.47, "top": 5.3, "width": 5.8, "height": 1.1, "fill_color": "A08C60"},
+      {"op": "add_text", "slide_index": 1, "text": "$18M ARR Year 1 target", "left": 0.67, "top": 5.4, "width": 5.4, "height": 0.4, "font_size": 18, "bold": true, "font_color": "FFFFFF"},
+      {"op": "add_text", "slide_index": 1, "text": "200 enterprise accounts with 92% retention", "left": 0.67, "top": 5.85, "width": 5.4, "height": 0.4, "font_size": 12, "font_color": "FFFFFF"},
+      {"op": "add_notes", "slide_index": 1, "text": "Executive summary: Aurora delivers measurable improvements in resolution time, customer satisfaction, and revenue predictability."},
+
+      {"op": "add_slide", "layout_name": "Section Header"},
+      {"op": "set_semantic_text", "slide_index": 2, "role": "title", "text": "Market Opportunity"},
+
+      {"op": "add_slide", "layout_name": "Title, Content 1 (Max)"},
+      {"op": "set_semantic_text", "slide_index": 3, "role": "title", "text": "Customer service AI market will reach $31B by 2027, growing at 24% CAGR"},
+      {"op": "set_semantic_text", "slide_index": 3, "role": "body", "text": " "},
+      {"op": "add_bar_chart", "slide_index": 3, "categories": ["2022", "2023", "2024", "2025E", "2026E", "2027E"], "series": [["Market Size ($B)", [8, 10, 13, 17, 23, 31]]], "left": 0.5, "top": 1.2, "width": 12.3, "height": 4.8},
+      {"op": "set_chart_title", "slide_index": 3, "chart_index": 0, "text": "Global Customer Service AI Market ($B)"},
+      {"op": "set_chart_series_style", "slide_index": 3, "chart_index": 0, "series_index": 0, "fill_color_hex": "A57361"},
+      {"op": "set_chart_legend", "slide_index": 3, "chart_index": 0, "visible": false},
+      {"op": "set_chart_axis_options", "slide_index": 3, "chart_index": 0, "axis": "value", "font_size": 10},
+      {"op": "set_chart_axis_options", "slide_index": 3, "chart_index": 0, "axis": "category", "font_size": 10},
+      {"op": "set_chart_data_labels", "slide_index": 3, "chart_index": 0, "enabled": true, "show_value": true},
+      {"op": "set_chart_data_labels_style", "slide_index": 3, "chart_index": 0, "position": "outside_end", "font_size": 10},
+      {"op": "add_text", "slide_index": 3, "text": "Source: Gartner, AI in Customer Service Forecast, 2023", "left": 0.5, "top": 6.8, "width": 8.0, "height": 0.3, "font_size": 10, "font_color": "666666"},
+      {"op": "add_notes", "slide_index": 3, "text": "The customer service AI market is experiencing rapid growth driven by enterprise demand for automation and improved customer experience."},
+
+      {"op": "add_slide", "layout_name": "Title, Content 1 (Max)"},
+      {"op": "set_semantic_text", "slide_index": 4, "role": "title", "text": "Three unmet needs create a $4.2B addressable opportunity for Aurora"},
+      {"op": "set_semantic_text", "slide_index": 4, "role": "body", "text": " "},
+      {"op": "add_rounded_rectangle", "slide_index": 4, "left": 0.3, "top": 1.2, "width": 4.0, "height": 5.0, "fill_color": "F0EDE6"},
+      {"op": "add_rounded_rectangle", "slide_index": 4, "left": 4.65, "top": 1.2, "width": 4.0, "height": 5.0, "fill_color": "F0EDE6"},
+      {"op": "add_rounded_rectangle", "slide_index": 4, "left": 9.0, "top": 1.2, "width": 4.0, "height": 5.0, "fill_color": "F0EDE6"},
+      {"op": "add_rectangle", "slide_index": 4, "left": 0.3, "top": 1.2, "width": 4.0, "height": 0.15, "fill_color": "A57361"},
+      {"op": "add_rectangle", "slide_index": 4, "left": 4.65, "top": 1.2, "width": 4.0, "height": 0.15, "fill_color": "4E6C67"},
+      {"op": "add_rectangle", "slide_index": 4, "left": 9.0, "top": 1.2, "width": 4.0, "height": 0.15, "fill_color": "A08C60"},
+      {"op": "add_icon", "slide_index": 4, "icon_name": "generic_circle", "left": 1.75, "top": 1.7, "size": 0.75, "color": "A57361"},
+      {"op": "add_icon", "slide_index": 4, "icon_name": "generic_circle", "left": 6.1, "top": 1.7, "size": 0.75, "color": "4E6C67"},
+      {"op": "add_icon", "slide_index": 4, "icon_name": "generic_circle", "left": 10.45, "top": 1.7, "size": 0.75, "color": "A08C60"},
+      {"op": "add_text", "slide_index": 4, "text": "$1.8B", "left": 0.6, "top": 2.7, "width": 3.4, "height": 0.5, "font_size": 28, "bold": true, "font_color": "A57361"},
+      {"op": "add_text", "slide_index": 4, "text": "Real-Time Sentiment Analysis", "left": 0.6, "top": 3.2, "width": 3.4, "height": 0.4, "font_size": 16, "bold": true, "font_color": "131313"},
+      {"op": "add_text", "slide_index": 4, "text": "Enterprises need to detect customer frustration in real time to prevent escalation and churn. Current tools analyze sentiment post-hoc.", "left": 0.6, "top": 3.7, "width": 3.4, "height": 1.5, "font_size": 12, "font_color": "575757"},
+      {"op": "add_text", "slide_index": 4, "text": "$1.6B", "left": 4.95, "top": 2.7, "width": 3.4, "height": 0.5, "font_size": 28, "bold": true, "font_color": "4E6C67"},
+      {"op": "add_text", "slide_index": 4, "text": "Autonomous Resolution", "left": 4.95, "top": 3.2, "width": 3.4, "height": 0.4, "font_size": 16, "bold": true, "font_color": "131313"},
+      {"op": "add_text", "slide_index": 4, "text": "65% of L1 support tickets follow repeatable patterns. AI can resolve these autonomously, freeing agents for complex cases.", "left": 4.95, "top": 3.7, "width": 3.4, "height": 1.5, "font_size": 12, "font_color": "575757"},
+      {"op": "add_text", "slide_index": 4, "text": "$0.8B", "left": 9.3, "top": 2.7, "width": 3.4, "height": 0.5, "font_size": 28, "bold": true, "font_color": "A08C60"},
+      {"op": "add_text", "slide_index": 4, "text": "Omnichannel Integration", "left": 9.3, "top": 3.2, "width": 3.4, "height": 0.4, "font_size": 16, "bold": true, "font_color": "131313"},
+      {"op": "add_text", "slide_index": 4, "text": "Customers expect seamless transitions between chat, email, voice, and social. No platform unifies context across all channels today.", "left": 9.3, "top": 3.7, "width": 3.4, "height": 1.5, "font_size": 12, "font_color": "575757"},
+      {"op": "add_text", "slide_index": 4, "text": "Source: Internal market sizing, McKinsey Digital 2024", "left": 0.5, "top": 6.8, "width": 8.0, "height": 0.3, "font_size": 10, "font_color": "666666"},
+      {"op": "add_notes", "slide_index": 4, "text": "The three unmet needs represent distinct TAM segments. Aurora's architecture addresses all three from a single platform."},
+
+      {"op": "add_slide", "layout_name": "Section Header"},
+      {"op": "set_semantic_text", "slide_index": 5, "role": "title", "text": "Product & Differentiation"},
+
+      {"op": "add_slide", "layout_name": "Title, Content 1 (Max)"},
+      {"op": "set_semantic_text", "slide_index": 6, "role": "title", "text": "Aurora combines real-time sentiment analysis with autonomous resolution — two capabilities no competitor offers together"},
+      {"op": "set_semantic_text", "slide_index": 6, "role": "body", "text": " "},
+      {"op": "add_rounded_rectangle", "slide_index": 6, "left": 0.3, "top": 1.2, "width": 6.2, "height": 5.4, "fill_color": "F0EDE6"},
+      {"op": "add_rounded_rectangle", "slide_index": 6, "left": 6.85, "top": 1.2, "width": 6.2, "height": 5.4, "fill_color": "F0EDE6"},
+      {"op": "add_text", "slide_index": 6, "text": "Core Capabilities", "left": 0.6, "top": 1.4, "width": 5.6, "height": 0.4, "font_size": 18, "bold": true, "font_color": "131313"},
+      {"op": "add_rectangle", "slide_index": 6, "left": 0.6, "top": 1.85, "width": 2.5, "height": 0.06, "fill_color": "A57361"},
+      {"op": "add_icon", "slide_index": 6, "icon_name": "generic_circle", "left": 0.6, "top": 2.2, "size": 0.6, "color": "A57361"},
+      {"op": "add_text", "slide_index": 6, "text": "Sentiment Analysis", "left": 1.4, "top": 2.2, "width": 4.8, "height": 0.35, "font_size": 14, "bold": true, "font_color": "131313"},
+      {"op": "add_text", "slide_index": 6, "text": "94% accuracy detecting frustration, satisfaction, and urgency in real time across 12 languages", "left": 1.4, "top": 2.55, "width": 4.8, "height": 0.6, "font_size": 12, "font_color": "575757"},
+      {"op": "add_icon", "slide_index": 6, "icon_name": "generic_circle", "left": 0.6, "top": 3.3, "size": 0.6, "color": "4E6C67"},
+      {"op": "add_text", "slide_index": 6, "text": "Autonomous Resolution", "left": 1.4, "top": 3.3, "width": 4.8, "height": 0.35, "font_size": 14, "bold": true, "font_color": "131313"},
+      {"op": "add_text", "slide_index": 6, "text": "Resolves 65% of L1 tickets end-to-end with no human involvement, including refunds and account changes", "left": 1.4, "top": 3.65, "width": 4.8, "height": 0.6, "font_size": 12, "font_color": "575757"},
+      {"op": "add_icon", "slide_index": 6, "icon_name": "generic_circle", "left": 0.6, "top": 4.4, "size": 0.6, "color": "A08C60"},
+      {"op": "add_text", "slide_index": 6, "text": "Omnichannel Context", "left": 1.4, "top": 4.4, "width": 4.8, "height": 0.35, "font_size": 14, "bold": true, "font_color": "131313"},
+      {"op": "add_text", "slide_index": 6, "text": "Unified customer history across chat, email, voice, and social media channels", "left": 1.4, "top": 4.75, "width": 4.8, "height": 0.6, "font_size": 12, "font_color": "575757"},
+      {"op": "add_icon", "slide_index": 6, "icon_name": "generic_square", "left": 0.6, "top": 5.5, "size": 0.6, "color": "956969"},
+      {"op": "add_text", "slide_index": 6, "text": "Predictive Analytics", "left": 1.4, "top": 5.5, "width": 4.8, "height": 0.35, "font_size": 14, "bold": true, "font_color": "131313"},
+      {"op": "add_text", "slide_index": 6, "text": "Forecasts ticket volume and identifies emerging issues 48 hours in advance", "left": 1.4, "top": 5.85, "width": 4.8, "height": 0.6, "font_size": 12, "font_color": "575757"},
+      {"op": "add_text", "slide_index": 6, "text": "Architecture Advantages", "left": 7.15, "top": 1.4, "width": 5.6, "height": 0.4, "font_size": 18, "bold": true, "font_color": "131313"},
+      {"op": "add_rectangle", "slide_index": 6, "left": 7.15, "top": 1.85, "width": 2.5, "height": 0.06, "fill_color": "4E6C67"},
+      {"op": "add_icon", "slide_index": 6, "icon_name": "generic_square", "left": 7.15, "top": 2.2, "size": 0.6, "color": "4E6C67"},
+      {"op": "add_text", "slide_index": 6, "text": "Real-Time Pipeline", "left": 7.95, "top": 2.2, "width": 4.8, "height": 0.35, "font_size": 14, "bold": true, "font_color": "131313"},
+      {"op": "add_text", "slide_index": 6, "text": "Sub-200ms latency from customer input to AI response, enabling natural conversation flow", "left": 7.95, "top": 2.55, "width": 4.8, "height": 0.6, "font_size": 12, "font_color": "575757"},
+      {"op": "add_icon", "slide_index": 6, "icon_name": "generic_square", "left": 7.15, "top": 3.3, "size": 0.6, "color": "A57361"},
+      {"op": "add_text", "slide_index": 6, "text": "Privacy-First Design", "left": 7.95, "top": 3.3, "width": 4.8, "height": 0.35, "font_size": 14, "bold": true, "font_color": "131313"},
+      {"op": "add_text", "slide_index": 6, "text": "SOC 2 Type II, GDPR compliant, on-prem deployment option for regulated industries", "left": 7.95, "top": 3.65, "width": 4.8, "height": 0.6, "font_size": 12, "font_color": "575757"},
+      {"op": "add_icon", "slide_index": 6, "icon_name": "generic_square", "left": 7.15, "top": 4.4, "size": 0.6, "color": "A08C60"},
+      {"op": "add_text", "slide_index": 6, "text": "Modular Integration", "left": 7.95, "top": 4.4, "width": 4.8, "height": 0.35, "font_size": 14, "bold": true, "font_color": "131313"},
+      {"op": "add_text", "slide_index": 6, "text": "Pre-built connectors for Salesforce, Zendesk, ServiceNow, and 30+ platforms", "left": 7.95, "top": 4.75, "width": 4.8, "height": 0.6, "font_size": 12, "font_color": "575757"},
+      {"op": "add_icon", "slide_index": 6, "icon_name": "generic_circle", "left": 7.15, "top": 5.5, "size": 0.6, "color": "CD9979"},
+      {"op": "add_text", "slide_index": 6, "text": "Continuous Learning", "left": 7.95, "top": 5.5, "width": 4.8, "height": 0.35, "font_size": 14, "bold": true, "font_color": "131313"},
+      {"op": "add_text", "slide_index": 6, "text": "Model improves with every interaction; accuracy gains of 2-3% per quarter observed in beta", "left": 7.95, "top": 5.85, "width": 4.8, "height": 0.6, "font_size": 12, "font_color": "575757"},
+      {"op": "add_notes", "slide_index": 6, "text": "Aurora's key differentiator is combining real-time sentiment with autonomous resolution. Competitors offer one or the other, but not both in an integrated pipeline."},
+
+      {"op": "add_slide", "layout_name": "Title, Content 1 (Max)"},
+      {"op": "set_semantic_text", "slide_index": 7, "role": "title", "text": "Feature comparison confirms Aurora leads in 5 of 7 critical capabilities"},
+      {"op": "set_semantic_text", "slide_index": 7, "role": "body", "text": " "},
+      {"op": "add_table", "slide_index": 7, "rows": [
+        ["Capability", "Aurora", "Competitor A", "Competitor B", "Competitor C"],
+        ["Real-time Sentiment", "Leader", "Partial", "None", "Partial"],
+        ["Autonomous Resolution", "Leader", "Partial", "Partial", "None"],
+        ["Omnichannel", "Leader", "Leader", "Partial", "Partial"],
+        ["Predictive Analytics", "Leader", "None", "Partial", "Leader"],
+        ["NLP Accuracy", "Parity", "Parity", "Parity", "Lagging"],
+        ["Security / Compliance", "Leader", "Parity", "Parity", "Lagging"],
+        ["Ecosystem Integrations", "Parity", "Leader", "Partial", "Partial"]
+      ], "left": 0.5, "top": 1.2, "width": 12.3, "height": 4.5, "font_size": 11},
+      {"op": "add_text", "slide_index": 7, "text": "Source: Competitive analysis, Q3 2025", "left": 0.5, "top": 6.8, "width": 8.0, "height": 0.3, "font_size": 10, "font_color": "666666"},
+      {"op": "add_notes", "slide_index": 7, "text": "Aurora leads in 5 of 7 categories. Ecosystem integrations gap will close in Q2 with planned Salesforce and HubSpot connectors."},
+
+      {"op": "add_slide", "layout_name": "Title, Content 1 (Max)"},
+      {"op": "set_semantic_text", "slide_index": 8, "role": "title", "text": "Subscription model captures 73% of revenue, ensuring predictable growth"},
+      {"op": "set_semantic_text", "slide_index": 8, "role": "body", "text": " "},
+      {"op": "add_pie_chart", "slide_index": 8, "categories": ["Subscription", "Professional Services", "Usage-Based Add-ons"], "series": [["Revenue Mix", [73, 15, 12]]], "left": 1.0, "top": 1.2, "width": 5.5, "height": 5.0},
+      {"op": "set_chart_plot_style", "slide_index": 8, "chart_index": 0, "vary_by_categories": true},
+      {"op": "set_chart_title", "slide_index": 8, "chart_index": 0, "text": "Year 1 Revenue Mix (%)"},
+      {"op": "set_chart_legend", "slide_index": 8, "chart_index": 0, "visible": true, "position": "bottom", "font_size": 10},
+      {"op": "set_chart_data_labels", "slide_index": 8, "chart_index": 0, "enabled": true, "show_value": true, "show_category_name": true},
+      {"op": "set_chart_data_labels_style", "slide_index": 8, "chart_index": 0, "position": "outside_end", "font_size": 10},
+      {"op": "add_rounded_rectangle", "slide_index": 8, "left": 7.2, "top": 1.4, "width": 5.6, "height": 1.4, "fill_color": "F0EDE6"},
+      {"op": "add_rectangle", "slide_index": 8, "left": 7.2, "top": 1.4, "width": 0.12, "height": 1.4, "fill_color": "A57361"},
+      {"op": "add_text", "slide_index": 8, "text": "Subscription (73%)", "left": 7.55, "top": 1.5, "width": 5.0, "height": 0.35, "font_size": 16, "bold": true, "font_color": "131313"},
+      {"op": "add_text", "slide_index": 8, "text": "$13.1M ARR — per-seat pricing at $45/agent/month with annual contracts. Average deal size: $65K.", "left": 7.55, "top": 1.9, "width": 5.0, "height": 0.7, "font_size": 12, "font_color": "575757"},
+      {"op": "add_rounded_rectangle", "slide_index": 8, "left": 7.2, "top": 3.0, "width": 5.6, "height": 1.4, "fill_color": "F0EDE6"},
+      {"op": "add_rectangle", "slide_index": 8, "left": 7.2, "top": 3.0, "width": 0.12, "height": 1.4, "fill_color": "4E6C67"},
+      {"op": "add_text", "slide_index": 8, "text": "Professional Services (15%)", "left": 7.55, "top": 3.1, "width": 5.0, "height": 0.35, "font_size": 16, "bold": true, "font_color": "131313"},
+      {"op": "add_text", "slide_index": 8, "text": "$2.7M — implementation, training, and custom integration packages averaging $13.5K per engagement.", "left": 7.55, "top": 3.5, "width": 5.0, "height": 0.7, "font_size": 12, "font_color": "575757"},
+      {"op": "add_rounded_rectangle", "slide_index": 8, "left": 7.2, "top": 4.6, "width": 5.6, "height": 1.4, "fill_color": "F0EDE6"},
+      {"op": "add_rectangle", "slide_index": 8, "left": 7.2, "top": 4.6, "width": 0.12, "height": 1.4, "fill_color": "A08C60"},
+      {"op": "add_text", "slide_index": 8, "text": "Usage-Based Add-ons (12%)", "left": 7.55, "top": 4.7, "width": 5.0, "height": 0.35, "font_size": 16, "bold": true, "font_color": "131313"},
+      {"op": "add_text", "slide_index": 8, "text": "$2.2M — premium API calls, advanced analytics dashboards, and custom model training.", "left": 7.55, "top": 5.1, "width": 5.0, "height": 0.7, "font_size": 12, "font_color": "575757"},
+      {"op": "add_text", "slide_index": 8, "text": "Source: Finance team projections, FY2026 plan", "left": 0.5, "top": 6.8, "width": 8.0, "height": 0.3, "font_size": 10, "font_color": "666666"},
+      {"op": "add_notes", "slide_index": 8, "text": "The 73% subscription mix ensures revenue predictability. Professional services provide implementation support while usage-based add-ons capture expansion revenue."},
+
+      {"op": "add_slide", "layout_name": "Title, Content 1 (Max)"},
+      {"op": "set_semantic_text", "slide_index": 9, "role": "title", "text": "Go-to-market follows a three-phase approach: design partners, segment expansion, full launch"},
+      {"op": "set_semantic_text", "slide_index": 9, "role": "body", "text": " "},
+      {"op": "add_rectangle", "slide_index": 9, "left": 0.3, "top": 1.5, "width": 12.7, "height": 0.08, "fill_color": "A57361"},
+      {"op": "add_rounded_rectangle", "slide_index": 9, "left": 0.3, "top": 1.9, "width": 3.9, "height": 4.5, "fill_color": "F0EDE6"},
+      {"op": "add_rounded_rectangle", "slide_index": 9, "left": 4.55, "top": 1.9, "width": 3.9, "height": 4.5, "fill_color": "F0EDE6"},
+      {"op": "add_rounded_rectangle", "slide_index": 9, "left": 8.8, "top": 1.9, "width": 4.2, "height": 4.5, "fill_color": "F0EDE6"},
+      {"op": "add_oval", "slide_index": 9, "left": 1.75, "top": 1.3, "width": 0.85, "height": 0.85, "fill_color": "A57361"},
+      {"op": "add_text", "slide_index": 9, "text": "1", "left": 1.75, "top": 1.35, "width": 0.85, "height": 0.65, "font_size": 24, "bold": true, "font_color": "FFFFFF"},
+      {"op": "add_oval", "slide_index": 9, "left": 6.0, "top": 1.3, "width": 0.85, "height": 0.85, "fill_color": "4E6C67"},
+      {"op": "add_text", "slide_index": 9, "text": "2", "left": 6.0, "top": 1.35, "width": 0.85, "height": 0.65, "font_size": 24, "bold": true, "font_color": "FFFFFF"},
+      {"op": "add_oval", "slide_index": 9, "left": 10.45, "top": 1.3, "width": 0.85, "height": 0.85, "fill_color": "A08C60"},
+      {"op": "add_text", "slide_index": 9, "text": "3", "left": 10.45, "top": 1.35, "width": 0.85, "height": 0.65, "font_size": 24, "bold": true, "font_color": "FFFFFF"},
+      {"op": "add_text", "slide_index": 9, "text": "Design Partners", "left": 0.6, "top": 2.3, "width": 3.3, "height": 0.4, "font_size": 18, "bold": true, "font_color": "131313"},
+      {"op": "add_text", "slide_index": 9, "text": "Q1 – Q2 2026", "left": 0.6, "top": 2.7, "width": 3.3, "height": 0.3, "font_size": 12, "bold": true, "font_color": "A57361"},
+      {"op": "add_text", "slide_index": 9, "text": "Onboard 15 design partners across fintech, healthcare, and e-commerce verticals.\n\nValidate product-market fit with weekly feedback loops.\n\nRefine pricing model based on usage patterns.\n\nTarget: 90% partner retention.", "left": 0.6, "top": 3.15, "width": 3.3, "height": 3.0, "font_size": 12, "font_color": "575757"},
+      {"op": "add_text", "slide_index": 9, "text": "Segment Expansion", "left": 4.85, "top": 2.3, "width": 3.3, "height": 0.4, "font_size": 18, "bold": true, "font_color": "131313"},
+      {"op": "add_text", "slide_index": 9, "text": "Q3 2026", "left": 4.85, "top": 2.7, "width": 3.3, "height": 0.3, "font_size": 12, "bold": true, "font_color": "4E6C67"},
+      {"op": "add_text", "slide_index": 9, "text": "Expand to mid-market segment with self-serve onboarding.\n\nLaunch partner channel program with 5 system integrators.\n\nScale to 100 active accounts.\n\nTarget: $6M pipeline.", "left": 4.85, "top": 3.15, "width": 3.3, "height": 3.0, "font_size": 12, "font_color": "575757"},
+      {"op": "add_text", "slide_index": 9, "text": "Full Launch", "left": 9.1, "top": 2.3, "width": 3.6, "height": 0.4, "font_size": 18, "bold": true, "font_color": "131313"},
+      {"op": "add_text", "slide_index": 9, "text": "Q4 2026", "left": 9.1, "top": 2.7, "width": 3.6, "height": 0.3, "font_size": 12, "bold": true, "font_color": "A08C60"},
+      {"op": "add_text", "slide_index": 9, "text": "Activate enterprise direct sales team (12 AEs).\n\nLaunch brand campaign and industry events.\n\nHit 200 enterprise accounts.\n\nTarget: $18M ARR, 92% retention.", "left": 9.1, "top": 3.15, "width": 3.6, "height": 3.0, "font_size": 12, "font_color": "575757"},
+      {"op": "add_notes", "slide_index": 9, "text": "The three-phase approach de-risks the launch. Design partners validate PMF before scaling spend."},
+
+      {"op": "add_slide", "layout_name": "Title, Content 1 (Max)"},
+      {"op": "set_semantic_text", "slide_index": 10, "role": "title", "text": "Year 1 targets: $18M ARR, 200 enterprise accounts, 92% retention"},
+      {"op": "set_semantic_text", "slide_index": 10, "role": "body", "text": " "},
+      {"op": "add_rounded_rectangle", "slide_index": 10, "left": 0.3, "top": 1.5, "width": 4.0, "height": 3.0, "fill_color": "A57361"},
+      {"op": "add_text", "slide_index": 10, "text": "$18M", "left": 0.6, "top": 1.8, "width": 3.4, "height": 0.9, "font_size": 44, "bold": true, "font_color": "FFFFFF"},
+      {"op": "add_text", "slide_index": 10, "text": "Annual Recurring Revenue", "left": 0.6, "top": 2.7, "width": 3.4, "height": 0.35, "font_size": 16, "bold": true, "font_color": "FFFFFF"},
+      {"op": "add_text", "slide_index": 10, "text": "3.5x return on $5.1M go-to-market investment", "left": 0.6, "top": 3.15, "width": 3.4, "height": 0.6, "font_size": 12, "font_color": "FFFFFF"},
+      {"op": "add_rounded_rectangle", "slide_index": 10, "left": 4.65, "top": 1.5, "width": 4.0, "height": 3.0, "fill_color": "4E6C67"},
+      {"op": "add_text", "slide_index": 10, "text": "200", "left": 4.95, "top": 1.8, "width": 3.4, "height": 0.9, "font_size": 44, "bold": true, "font_color": "FFFFFF"},
+      {"op": "add_text", "slide_index": 10, "text": "Enterprise Accounts", "left": 4.95, "top": 2.7, "width": 3.4, "height": 0.35, "font_size": 16, "bold": true, "font_color": "FFFFFF"},
+      {"op": "add_text", "slide_index": 10, "text": "Avg deal size: $65K with 18-month payback", "left": 4.95, "top": 3.15, "width": 3.4, "height": 0.6, "font_size": 12, "font_color": "FFFFFF"},
+      {"op": "add_rounded_rectangle", "slide_index": 10, "left": 9.0, "top": 1.5, "width": 4.0, "height": 3.0, "fill_color": "A08C60"},
+      {"op": "add_text", "slide_index": 10, "text": "92%", "left": 9.3, "top": 1.8, "width": 3.4, "height": 0.9, "font_size": 44, "bold": true, "font_color": "FFFFFF"},
+      {"op": "add_text", "slide_index": 10, "text": "Net Retention Rate", "left": 9.3, "top": 2.7, "width": 3.4, "height": 0.35, "font_size": 16, "bold": true, "font_color": "FFFFFF"},
+      {"op": "add_text", "slide_index": 10, "text": "Expansion revenue offsets churn by 2:1 ratio", "left": 9.3, "top": 3.15, "width": 3.4, "height": 0.6, "font_size": 12, "font_color": "FFFFFF"},
+      {"op": "add_rounded_rectangle", "slide_index": 10, "left": 0.3, "top": 4.9, "width": 12.7, "height": 1.6, "fill_color": "F0EDE6"},
+      {"op": "add_text", "slide_index": 10, "text": "Key Milestones", "left": 0.6, "top": 5.0, "width": 3.0, "height": 0.35, "font_size": 14, "bold": true, "font_color": "131313"},
+      {"op": "add_text", "slide_index": 10, "text": "Q1: 15 design partners live   |   Q2: Series B close ($25M)   |   Q3: 100 accounts, channel launch   |   Q4: $18M ARR, full enterprise motion", "left": 0.6, "top": 5.4, "width": 12.1, "height": 0.6, "font_size": 12, "font_color": "575757"},
+      {"op": "add_notes", "slide_index": 10, "text": "These targets are based on conservative assumptions from design partner feedback and comparable SaaS benchmarks."},
+
+      {"op": "add_slide", "layout_name": "Blank"},
+      {"op": "add_text", "slide_index": 11, "text": "Disclaimer", "left": 0.5, "top": 0.5, "width": 5.0, "height": 0.4, "font_size": 14, "bold": true, "font_color": "131313"},
+      {"op": "add_text", "slide_index": 11, "text": "This presentation contains forward-looking statements regarding Project Aurora's anticipated performance, market opportunity, and financial projections. These statements are based on current expectations and assumptions, and actual results may differ materially. All market data sourced from third-party research is believed to be reliable but has not been independently verified. Financial projections are estimates and should not be construed as guarantees. This document is confidential and intended solely for the use of the designated recipients. Unauthorized distribution is prohibited.", "left": 0.5, "top": 1.2, "width": 12.3, "height": 4.0, "font_size": 11, "font_color": "575757"},
+
+      {"op": "add_slide", "layout_name": "Conclusion"},
+      {"op": "set_title_subtitle", "slide_index": 12, "title": "Thank You", "subtitle": "Project Aurora | Strategy Team | November 2025"}
+    ]
+  }
+}

@@ -1,0 +1,44 @@
+name: Rebuild Visual Gate
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  visual-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install system render dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libreoffice poppler-utils
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+      - name: Set up Python
+        run: uv python install 3.12
+      - name: Sync dependencies
+        run: uv sync --all-groups
+      - name: Run rebuild visual gate (if corpus exists)
+        run: |
+          if [ ! -d corpus ]; then
+            echo "corpus directory not found; skipping visual gate"
+            exit 0
+          fi
+          uv run python scripts/rebuild_visual_gate.py corpus \
+            --work-dir results/rebuild_visual_gate \
+            --rebuild-dir rebuilt/visual_gate \
+            --max-diff-ratio 0.01 \
+            --pdf-raster-dpi 144 \
+            --pdf-raster-timeout-sec 60 \
+            --render-timeout-sec 180 \
+            --report results/rebuild_visual_gate/summary.json
+      - name: Upload visual gate artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: rebuild-visual-gate
+          path: |
+            results/rebuild_visual_gate
+            rebuilt/visual_gate
+          if-no-files-found: ignore

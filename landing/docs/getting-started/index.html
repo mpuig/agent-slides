@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Getting Started &mdash; agent-slides</title>
+    <meta name="description" content="Install agent-slides, extract your template, and build your first presentation in minutes." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../style.css" />
+    <link rel="icon" href="../../favicon.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <a href="#main" class="skip-link">Skip to content</a>
+
+    <nav>
+      <div class="nav-inner">
+        <a href="/" class="logo">agent-<span class="accent">slides</span></a>
+        <div class="nav-links">
+          <a href="/docs" class="active">Docs</a>
+          <a href="/examples">Examples</a>
+          <a href="/notes">Notes</a>
+          <a href="https://pypi.org/project/agent-slides/" class="nav-cta">PyPI</a>
+        </div>
+        <button class="mobile-toggle" aria-label="Menu" aria-expanded="false" onclick="this.setAttribute('aria-expanded',this.getAttribute('aria-expanded')==='false'?'true':'false');document.querySelector('.nav-links').classList.toggle('open')">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 5h14M3 10h14M3 15h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+    </nav>
+
+    <main id="main">
+    <div class="article">
+      <div class="container">
+        <div class="article-header">
+          <span class="label">Getting started</span>
+          <h1>From prompt to polished deck.</h1>
+          <p class="section-sub">Install the package, give it your template, and start building presentations.</p>
+        </div>
+
+        <div class="article-layout">
+          <div class="prose">
+
+            <h2 id="install">Install</h2>
+
+            <pre><code><span class="c"># with uv (recommended)</span>
+uv add agent-slides
+
+<span class="c"># or with pip</span>
+pip install agent-slides</code></pre>
+
+            <p>If you're using Claude Code, symlink the skill files so the agent can discover them:</p>
+
+            <pre><code>ln -s skills .claude/skills</code></pre>
+
+            <p>This gives your agent access to seven composable skills &mdash; from template extraction to full pipeline orchestration. You can verify everything is wired up by running <code>slides version</code>.</p>
+
+            <h2 id="prepare">Prepare your template</h2>
+
+            <p>Every deck starts from a PowerPoint template &mdash; your corporate theme, a client-provided file, or one of the bundled templates. The extraction step analyzes its layouts, colors, fonts, and spatial zones into a machine-readable contract the agent uses when building slides.</p>
+
+            <p>In Claude Code, run:</p>
+
+            <pre><code>/slides-extract</code></pre>
+
+            <p>The skill will ask you to point it at a <code>.pptx</code> file. It produces three artifacts in your project directory:</p>
+
+            <ul>
+              <li><strong>Resolved manifest</strong> &mdash; a JSON contract describing every available layout, its placeholders, color zones, and editable regions</li>
+              <li><strong>Base template</strong> &mdash; a cleaned copy of the original file, ready for rendering</li>
+              <li><strong>Design profile</strong> &mdash; font-size bounds, allowed colors, and contrast rules used by the QA engine</li>
+            </ul>
+
+            <p>You can also run extraction directly from the CLI:</p>
+
+            <pre><code>slides extract "template.pptx" --output-dir project/</code></pre>
+
+            <h2 id="build">Build your first deck</h2>
+
+            <p>With your template extracted, you're ready to build. In Claude Code:</p>
+
+            <pre><code>/slides-full "10-slide strategy deck on Q3 growth"</code></pre>
+
+            <p>The agent plans a narrative arc, selects layouts from your template contract, renders slide operations into a <code>.pptx</code> file, and runs quality checks automatically. If the QA engine finds issues &mdash; font sizes outside bounds, low contrast, overlapping shapes &mdash; the agent fixes them and rechecks until both gates pass.</p>
+
+            <p>If you want just the build step without the full QA loop:</p>
+
+            <pre><code>/slides-build "10-slide strategy deck on Q3 growth"</code></pre>
+
+            <p>The output is a ready-to-open PowerPoint file in your working directory.</p>
+
+            <h2 id="refine">Refine and iterate</h2>
+
+            <p>Decks rarely land perfectly on the first pass. Use natural language to request changes:</p>
+
+            <ul>
+              <li>"Change slide 3 to use the split-panel layout"</li>
+              <li>"Move the chart on slide 8 to the left"</li>
+              <li>"Replace the pie chart with a bar chart"</li>
+              <li>"Add speaker notes to every slide"</li>
+              <li>"Swap the order of slides 4 and 5"</li>
+            </ul>
+
+            <p>For targeted edits on an existing deck:</p>
+
+            <pre><code>/slides-edit</code></pre>
+
+            <p>The edit skill reads the current deck, applies your changes as operations, and re-renders. It supports text replacements, layout swaps, chart modifications, and structural changes like reordering or removing slides.</p>
+
+            <h2 id="review">Review quality</h2>
+
+            <p>Three specialized skills cover different dimensions of deck quality:</p>
+
+            <h3><code>/slides-audit</code> &mdash; Technical lint</h3>
+            <p>Checks every shape against the design profile: font sizes within bounds, sufficient color contrast, no overlapping elements, all content within slide margins. Returns structured violations with suggested fixes.</p>
+
+            <h3><code>/slides-critique</code> &mdash; Storytelling review</h3>
+            <p>Evaluates narrative structure: action titles that drive the story forward, MECE logic across sections, consistent level of detail, and clear slide-to-slide flow.</p>
+
+            <h3><code>/slides-polish</code> &mdash; Final pass</h3>
+            <p>Adds speaker notes, checks metadata consistency, verifies source citations, and ensures visual consistency across the full deck. This is the last step before delivery.</p>
+
+            <p>The <code>/slides-full</code> pipeline chains all three automatically. Run them individually when you want fine-grained control over the review process.</p>
+
+            <h2 id="cli-reference">Advanced: CLI reference</h2>
+
+            <p>For power users and automation workflows, the CLI provides direct access to every operation the skills use under the hood.</p>
+
+            <h3>Key commands</h3>
+
+            <pre><code><span class="c"># Render a slides.json into a .pptx</span>
+slides render --slides-json @slides.json \
+  --profile project/design-profile.json \
+  --output deck.pptx
+
+<span class="c"># Apply raw operations (with optional dry-run)</span>
+slides apply --ops-json @ops.json --dry-run --output deck.pptx
+
+<span class="c"># Run validation + design lint</span>
+slides qa deck.pptx \
+  --profile project/design-profile.json \
+  --out qa.json --compact
+
+<span class="c"># Inspect slide content with field masks</span>
+slides inspect deck.pptx \
+  --fields slides.title,slides.shapes.text \
+  --page-size 5 --compact
+
+<span class="c"># Search for content across slides</span>
+slides find deck.pptx --query "pricing" --out results.json
+
+<span class="c"># Find-and-replace text</span>
+slides edit deck.pptx \
+  --query "old text" --replacement "new text" \
+  --output deck.pptx</code></pre>
+
+            <h3>CI gating</h3>
+
+            <p>Gate deck quality in your pipeline with exit codes &mdash; <code>0</code> means all clear, non-zero means violations found:</p>
+
+            <pre><code>slides validate deck.pptx || exit 1
+slides lint deck.pptx --profile dp.json --out lint.json --compact
+slides qa deck.pptx --profile dp.json --out qa.json --compact</code></pre>
+
+          </div>
+
+          <div class="toc">
+            <div class="toc-title">On this page</div>
+            <a href="#install">Install</a>
+            <a href="#prepare">Prepare your template</a>
+            <a href="#build">Build your first deck</a>
+            <a href="#refine">Refine and iterate</a>
+            <a href="#review">Review quality</a>
+            <a href="#cli-reference">CLI reference</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    </main>
+
+    <footer>
+      <div class="container footer-inner">
+        <div class="footer-left">
+          <span class="logo">agent-<span class="accent">slides</span></span>
+          <p>An agent skill for PowerPoint generation.<br />Open-source. Python 3.12+.</p>
+        </div>
+        <div class="footer-links">
+          <div class="footer-col">
+            <div class="footer-col-title">Learn</div>
+            <a href="/docs">Docs</a>
+            <a href="/examples">Examples</a>
+            <a href="/notes">Notes</a>
+          </div>
+          <div class="footer-col">
+            <div class="footer-col-title">Links</div>
+            <a href="https://pypi.org/project/agent-slides/">PyPI</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+  </body>
+</html>
