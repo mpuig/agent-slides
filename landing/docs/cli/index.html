@@ -1,0 +1,449 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CLI reference &mdash; agent-slides</title>
+    <meta name="description" content="Every command, flag, operation type, icon, error code, and exit code in the agent-slides CLI." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../style.css" />
+    <link rel="icon" href="../../favicon.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <a href="#main" class="skip-link">Skip to content</a>
+
+    <nav>
+      <div class="nav-inner">
+        <a href="/" class="logo">agent-<span class="accent">slides</span></a>
+        <div class="nav-links">
+          <a href="/docs" class="active">Docs</a>
+          <a href="/examples">Examples</a>
+          <a href="/notes">Notes</a>
+          <a href="https://pypi.org/project/agent-slides/" class="nav-cta">PyPI</a>
+        </div>
+        <button class="mobile-toggle" aria-label="Menu" aria-expanded="false" onclick="this.setAttribute('aria-expanded',this.getAttribute('aria-expanded')==='false'?'true':'false');document.querySelector('.nav-links').classList.toggle('open')">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 5h14M3 10h14M3 15h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+    </nav>
+
+    <main id="main">
+    <div class="article">
+      <div class="container">
+        <div class="article-header">
+          <span class="label">Documentation</span>
+          <h1>CLI reference.</h1>
+          <p class="section-sub">14 commands, 50+ operation types, 9 chart types, structured errors, and deterministic output.</p>
+        </div>
+
+        <div class="article-layout">
+          <div class="prose">
+
+            <h2 id="commands">Commands</h2>
+
+            <p>All commands follow the pattern <code>slides &lt;command&gt; [options]</code>. Run <code>slides &lt;command&gt; --help</code> for per-command details.</p>
+
+            <table>
+              <tr><th>Command</th><th>Description</th></tr>
+              <tr><td><code>extract</code></td><td>Extract template contracts from a .pptx</td></tr>
+              <tr><td><code>render</code></td><td>Render a deck from slides.json (plan + ops)</td></tr>
+              <tr><td><code>apply</code></td><td>Apply an ops patch to an existing deck</td></tr>
+              <tr><td><code>inspect</code></td><td>Inspect deck structure as JSON</td></tr>
+              <tr><td><code>find</code></td><td>Search text across slides</td></tr>
+              <tr><td><code>plan-inspect</code></td><td>Inspect a slides.json document with pagination</td></tr>
+              <tr><td><code>validate</code></td><td>Run OOXML validation</td></tr>
+              <tr><td><code>lint</code></td><td>Lint deck against design profile</td></tr>
+              <tr><td><code>qa</code></td><td>Combined gate: validate + lint + assets</td></tr>
+              <tr><td><code>edit</code></td><td>Text find-and-replace</td></tr>
+              <tr><td><code>transform</code></td><td>Transform a slide to a different archetype</td></tr>
+              <tr><td><code>repair</code></td><td>Conservative repair pass</td></tr>
+              <tr><td><code>docs</code></td><td>Print runtime discovery contract</td></tr>
+              <tr><td><code>version</code></td><td>Print contract version</td></tr>
+            </table>
+
+            <h2 id="global-flags">Global flags</h2>
+
+            <p>Available on every command:</p>
+
+            <table>
+              <tr><th>Flag</th><th>Effect</th></tr>
+              <tr><td><code>--fields</code></td><td>Comma-separated field mask. Only include these fields in JSON output. See <a href="#fields">Field masks</a>.</td></tr>
+              <tr><td><code>--ndjson</code></td><td>Emit list outputs as newline-delimited JSON instead of arrays.</td></tr>
+              <tr><td><code>--compact</code></td><td>Strip null and empty values from JSON output. Reduces size 30-50%.</td></tr>
+              <tr><td><code>--verbose</code></td><td>Print full stdout payloads. Default is quiet when writing to files.</td></tr>
+            </table>
+
+            <h3 id="fields">Field masks</h3>
+
+            <p><code>--fields</code> accepts a comma-separated list of dot-separated paths. Only matching fields appear in the output. Dot notation traverses into arrays, so <code>slides.title</code> extracts the <code>title</code> from each slide object.</p>
+
+            <pre><code><span class="c"># top-level field</span>
+slides inspect deck.pptx --fields summary --compact
+
+<span class="c"># nested scalar inside a dict</span>
+slides inspect deck.pptx --fields summary.slide_count --compact
+
+<span class="c"># project specific keys from each slide (array traversal)</span>
+slides inspect deck.pptx --fields slides.slide_index,slides.title --compact --page-size 5
+
+<span class="c"># double-nested: project into shapes inside slides</span>
+slides inspect deck.pptx --fields slides.slide_index,slides.shapes.kind,slides.shapes.name \
+  --compact --page-size 1</code></pre>
+
+            <p>Each command has an allowlist of valid fields. To discover them:</p>
+
+            <pre><code><span class="c"># list all field masks for all payloads</span>
+slides docs fields
+
+<span class="c"># list fields for a specific payload</span>
+slides docs fields:inspect
+slides docs fields:lint
+slides docs fields:find</code></pre>
+
+            <p>Requesting a field not in the allowlist returns a clear error with the valid options listed.</p>
+
+            <h2 id="extract-cmd">slides extract</h2>
+
+            <pre><code>slides extract &lt;source.pptx&gt; --output-dir &lt;dir&gt; [options]</code></pre>
+
+            <table>
+              <tr><th>Option</th><th>Description</th></tr>
+              <tr><td><code>source</code></td><td>Template or sample .pptx file (required)</td></tr>
+              <tr><td><code>--output-dir</code></td><td>Output directory for artifacts (required)</td></tr>
+              <tr><td><code>--base-template-out</code></td><td>Also write a clean base template</td></tr>
+            </table>
+
+            <p>Writes <code>template_layout.json</code>, <code>content_layout.json</code>, <code>archetypes.json</code>, <code>resolved_manifest.json</code>, <code>slides_manifest.json</code>, <code>slide_analysis.json</code>, and optionally <code>base_template.pptx</code> and <code>icons/</code>.</p>
+
+            <p>See <a href="/docs/how-it-works#extraction">How it works: Extraction</a> for what each artifact contains and how they feed into the build step.</p>
+
+            <h2 id="render-cmd">slides render</h2>
+
+            <pre><code>slides render --slides-json @slides.json --output deck.pptx [options]</code></pre>
+
+            <table>
+              <tr><th>Option</th><th>Description</th></tr>
+              <tr><td><code>--slides-json</code></td><td>Slides document JSON or <code>@file</code> (required)</td></tr>
+              <tr><td><code>--template</code></td><td>Template PPTX path</td></tr>
+              <tr><td><code>--output</code></td><td>Output PPTX path</td></tr>
+              <tr><td><code>--profile</code></td><td>Design profile JSON file</td></tr>
+              <tr><td><code>--icon-pack-dir</code></td><td>Custom icon directory</td></tr>
+              <tr><td><code>--dry-run</code></td><td>Plan operations without applying</td></tr>
+              <tr><td><code>--no-transaction</code></td><td>Disable rollback on failure</td></tr>
+              <tr><td><code>--non-deterministic</code></td><td>Disable deterministic ZIP save</td></tr>
+            </table>
+
+            <h2 id="apply-cmd">slides apply</h2>
+
+            <pre><code>slides apply [input.pptx] --ops-json @ops.json --output out.pptx</code></pre>
+
+            <p>Applies an <code>OperationBatch</code> to an existing deck (or a blank deck if <code>input</code> is omitted). Supports <code>--dry-run</code>, <code>--profile</code>, <code>--icon-pack-dir</code>, and the same transaction/determinism flags as <code>render</code>.</p>
+
+            <h2 id="inspect-cmd">slides inspect</h2>
+
+            <pre><code>slides inspect deck.pptx [options]</code></pre>
+
+            <table>
+              <tr><th>Option</th><th>Description</th></tr>
+              <tr><td><code>--out</code></td><td>Write inspect JSON to file</td></tr>
+              <tr><td><code>--summary</code></td><td>Print deck summary only</td></tr>
+              <tr><td><code>--placeholders N</code></td><td>List placeholders for slide N</td></tr>
+              <tr><td><code>--fingerprint</code></td><td>Print deterministic SHA-256 fingerprint</td></tr>
+              <tr><td><code>--page-size N</code></td><td>Paginate output (N slides per page)</td></tr>
+              <tr><td><code>--page-token T</code></td><td>Continue from page token</td></tr>
+              <tr><td><code>--page-all</code></td><td>Emit all pages at once</td></tr>
+            </table>
+
+            <h2 id="find-cmd">slides find</h2>
+
+            <pre><code>slides find deck.pptx --query "pricing" [options]</code></pre>
+
+            <p>Searches for text across all slides. Returns matching shapes with slide/shape UIDs for targeted edits. Supports <code>--limit</code>, <code>--out</code>, and pagination flags.</p>
+
+            <h2 id="quality-cmds">slides validate, lint, qa</h2>
+
+            <pre><code><span class="c"># basic validation</span>
+slides validate deck.pptx
+
+<span class="c"># strict validation</span>
+slides validate deck.pptx --deep --fail-on-error
+
+<span class="c"># design lint</span>
+slides lint deck.pptx --profile dp.json --out lint.json --compact
+
+<span class="c"># combined gate</span>
+slides qa deck.pptx --profile dp.json --out qa.json --compact</code></pre>
+
+            <p><code>validate</code> checks OOXML structure. <code>lint</code> checks against the design profile (fonts, colors, overlap, contrast). <code>qa</code> runs both plus asset checks. All accept <code>--slides-json</code> for additional context.</p>
+
+            <h2 id="edit-cmd">slides edit, transform, repair</h2>
+
+            <pre><code><span class="c"># text replacement</span>
+slides edit deck.pptx --query "old text" --replacement "new text" \
+  --slide-uid "abc123" --output deck.pptx
+
+<span class="c"># archetype transform</span>
+slides transform deck.pptx --slide-uid "abc123" --to timeline \
+  --output deck.pptx
+
+<span class="c"># conservative repair</span>
+slides repair deck.pptx --output deck.pptx</code></pre>
+
+            <p><code>edit</code> targets by slide UID, shape UID, or both. <code>transform</code> converts a slide to a different archetype. <code>repair</code> applies safe fixes without changing content.</p>
+
+            <h2 id="docs-cmd">slides docs</h2>
+
+            <pre><code><span class="c"># full markdown docs</span>
+slides docs
+
+<span class="c"># machine-readable contract as JSON</span>
+slides docs json
+
+<span class="c"># specific method</span>
+slides docs method:render
+
+<span class="c"># specific schema</span>
+slides docs schema:slides-document
+slides docs schema:operation-batch
+
+<span class="c"># field mask discovery</span>
+slides docs fields
+slides docs fields:inspect</code></pre>
+
+            <p>Runtime schema discovery. The schemas come from the same Pydantic models that validate input, so they can't drift from the implementation. <code>fields</code> and <code>fields:&lt;payload&gt;</code> list the allowed <code>--fields</code> values for each command.</p>
+
+            <h2 id="operations">Operations reference</h2>
+
+            <p>Operations are JSON objects in an <code>OperationBatch</code>. Each has an <code>op</code> field and type-specific parameters. All geometry values are in inches.</p>
+
+            <h3 id="ops-content">Content</h3>
+
+            <table>
+              <tr><th><code>op</code></th><th>Required</th><th>Optional</th></tr>
+              <tr><td><code>add_slide</code></td><td></td><td><code>layout_index</code> (default 6), <code>layout_name</code></td></tr>
+              <tr><td><code>add_text</code></td><td><code>slide_index</code>, <code>text</code>, <code>left</code>, <code>top</code>, <code>width</code>, <code>height</code></td><td><code>font_size</code> (20), <code>bold</code>, <code>font_name</code>, <code>font_color</code></td></tr>
+              <tr><td><code>add_image</code></td><td><code>slide_index</code>, <code>path</code>, <code>left</code>, <code>top</code></td><td><code>width</code>, <code>height</code></td></tr>
+              <tr><td><code>add_table</code></td><td><code>slide_index</code>, <code>rows</code>, <code>left</code>, <code>top</code>, <code>width</code>, <code>height</code></td><td><code>font_size</code></td></tr>
+              <tr><td><code>add_notes</code></td><td><code>slide_index</code>, <code>text</code></td><td></td></tr>
+              <tr><td><code>add_media</code></td><td><code>slide_index</code>, <code>path</code>, <code>left</code>, <code>top</code>, <code>width</code>, <code>height</code></td><td><code>mime_type</code>, <code>poster_path</code></td></tr>
+              <tr><td><code>replace_text</code></td><td><code>slide_index</code>, <code>old</code>, <code>new</code></td><td></td></tr>
+              <tr><td><code>delete_slide</code></td><td><code>slide_index</code></td><td></td></tr>
+              <tr><td><code>move_slide</code></td><td><code>from_index</code>, <code>to_index</code></td><td></td></tr>
+            </table>
+
+            <p>The <code>rows</code> parameter for <code>add_table</code> is a nested array: <code>[["Header A", "Header B"], ["row1a", "row1b"]]</code>. Allow about 0.5 inches per row for height.</p>
+
+            <h3 id="ops-icons">Icons</h3>
+
+            <table>
+              <tr><th><code>op</code></th><th>Required</th><th>Optional</th></tr>
+              <tr><td><code>add_icon</code></td><td><code>slide_index</code>, <code>icon_name</code>, <code>left</code>, <code>top</code></td><td><code>size</code> (0.75), <code>color</code> (6-digit hex)</td></tr>
+            </table>
+
+            <p>Icons are SVG-based vector shapes inserted as native PowerPoint objects (not images). Two built-in icons ship with agent-slides: <code>generic_circle</code> and <code>generic_square</code>.</p>
+
+            <p>Templates can contain additional icons. During <code>slides extract</code>, vector shapes found on template slides are exported to an <code>icons/</code> directory. These become available to <code>add_icon</code> when you set <code>icon_pack_dir</code> in the design profile.</p>
+
+            <p>Name matching is case-insensitive and partial. <code>"circle"</code> matches <code>generic_circle</code>. <code>"Target"</code> matches <code>icon_Target.svg</code> from the template pack.</p>
+
+            <pre><code><span class="c">// place a circle icon, white fill, at position (2, 1.5)</span>
+{
+  "op": "add_icon",
+  "slide_index": 0,
+  "icon_name": "circle",
+  "left": 2.0,
+  "top": 1.5,
+  "size": 0.75,
+  "color": "FFFFFF"
+}</code></pre>
+
+            <p>To see which icons are available for a given template, check the <code>icons/</code> directory after extraction. The design profile's <code>icon_pack_dir</code> field points to this directory.</p>
+
+            <h3 id="ops-shapes">Shapes</h3>
+
+            <table>
+              <tr><th><code>op</code></th><th>Required</th><th>Optional</th></tr>
+              <tr><td><code>add_rectangle</code></td><td><code>slide_index</code>, <code>left</code>, <code>top</code>, <code>width</code>, <code>height</code>, <code>fill_color</code></td><td><code>border_color</code>, <code>border_width</code></td></tr>
+              <tr><td><code>add_rounded_rectangle</code></td><td>(same as rectangle)</td><td><code>corner_radius</code>, borders</td></tr>
+              <tr><td><code>add_oval</code></td><td>(same as rectangle)</td><td>borders</td></tr>
+              <tr><td><code>add_line_shape</code></td><td><code>slide_index</code>, <code>x1</code>, <code>y1</code>, <code>x2</code>, <code>y2</code></td><td><code>color</code>, <code>line_width</code></td></tr>
+            </table>
+
+            <h3 id="ops-charts">Charts</h3>
+
+            <p>All chart ops require <code>slide_index</code>, <code>left</code>, <code>top</code>, <code>width</code>, <code>height</code>.</p>
+
+            <table>
+              <tr><th><code>op</code></th><th>Data format</th><th>Styles</th></tr>
+              <tr><td><code>add_bar_chart</code></td><td><code>categories</code> + <code>series</code></td><td>clustered, stacked, percent_stacked</td></tr>
+              <tr><td><code>add_line_chart</code></td><td><code>categories</code> + <code>series</code></td><td>line, line_markers, stacked, stacked_markers, percent_stacked, percent_stacked_markers</td></tr>
+              <tr><td><code>add_pie_chart</code></td><td><code>categories</code> + <code>series</code></td><td>pie, exploded, pie_of_pie, bar_of_pie</td></tr>
+              <tr><td><code>add_area_chart</code></td><td><code>categories</code> + <code>series</code></td><td>area, stacked, percent_stacked</td></tr>
+              <tr><td><code>add_doughnut_chart</code></td><td><code>categories</code> + <code>series</code></td><td>doughnut, exploded</td></tr>
+              <tr><td><code>add_radar_chart</code></td><td><code>categories</code> + <code>series</code></td><td>radar, filled, markers</td></tr>
+              <tr><td><code>add_scatter_chart</code></td><td><code>series</code> (xy tuples)</td><td>markers, line, line_no_markers, smooth, smooth_no_markers</td></tr>
+              <tr><td><code>add_bubble_chart</code></td><td><code>series</code> (xyz tuples)</td><td>bubble, bubble_3d</td></tr>
+              <tr><td><code>add_combo_chart_overlay</code></td><td><code>categories</code> + <code>bar_series</code> + <code>line_series</code></td><td></td></tr>
+            </table>
+
+            <p>Series format for category charts: <code>[["Series Name", [1.0, 2.0, 3.0]], ...]</code><br />
+            Scatter charts: <code>[["Name", [[x1, y1], [x2, y2]]], ...]</code><br />
+            Bubble charts: <code>[["Name", [[x, y, size], ...]], ...]</code></p>
+
+            <h3 id="ops-chart-styling">Chart styling</h3>
+
+            <p>All require <code>slide_index</code> and <code>chart_index</code>.</p>
+
+            <table>
+              <tr><th><code>op</code></th><th>Key parameters</th></tr>
+              <tr><td><code>update_chart_data</code></td><td><code>categories</code>, <code>series</code></td></tr>
+              <tr><td><code>set_chart_title</code></td><td><code>text</code></td></tr>
+              <tr><td><code>set_chart_style</code></td><td><code>style_id</code> (1-48)</td></tr>
+              <tr><td><code>set_chart_legend</code></td><td><code>visible</code>, <code>position</code>, <code>font_size</code>, <code>include_in_layout</code></td></tr>
+              <tr><td><code>set_chart_axis_titles</code></td><td><code>category_title</code>, <code>value_title</code></td></tr>
+              <tr><td><code>set_chart_axis_options</code></td><td><code>axis</code>, <code>reverse_order</code>, <code>visible</code>, <code>font_size</code></td></tr>
+              <tr><td><code>set_chart_axis_scale</code></td><td><code>minimum</code>, <code>maximum</code>, <code>major_unit</code>, <code>number_format</code></td></tr>
+              <tr><td><code>set_chart_data_labels</code></td><td><code>enabled</code>, <code>show_value</code>, <code>show_category_name</code></td></tr>
+              <tr><td><code>set_chart_data_labels_style</code></td><td><code>position</code> (use snake_case: <code>outside_end</code>), <code>font_size</code></td></tr>
+              <tr><td><code>set_chart_plot_style</code></td><td><code>vary_by_categories</code>, <code>gap_width</code>, <code>overlap</code>, <code>plot_area_x/y/w/h</code> (0&ndash;1 fractions)</td></tr>
+              <tr><td><code>set_chart_series_style</code></td><td><code>series_index</code>, <code>fill_color_hex</code></td></tr>
+              <tr><td><code>set_chart_series_line_style</code></td><td><code>series_index</code>, <code>line_color_hex</code>, <code>line_width_pt</code></td></tr>
+              <tr><td><code>set_chart_secondary_axis</code></td><td><code>enable</code>, <code>series_indices</code></td></tr>
+              <tr><td><code>set_line_series_marker</code></td><td><code>series_index</code>, <code>style</code>, <code>size</code></td></tr>
+              <tr><td><code>set_chart_series_trendline</code></td><td><code>series_index</code>, <code>trend_type</code></td></tr>
+            </table>
+
+            <h3 id="ops-layout">Layout and placeholders</h3>
+
+            <table>
+              <tr><th><code>op</code></th><th>Parameters</th></tr>
+              <tr><td><code>set_slide_background</code></td><td><code>slide_index</code>, <code>color_hex</code></td></tr>
+              <tr><td><code>set_placeholder_text</code></td><td><code>slide_index</code>, <code>placeholder_idx</code>, <code>text</code></td></tr>
+              <tr><td><code>set_title_subtitle</code></td><td><code>slide_index</code>, <code>title</code>, <code>subtitle</code></td></tr>
+              <tr><td><code>set_semantic_text</code></td><td><code>slide_index</code>, <code>role</code>, <code>text</code></td></tr>
+              <tr><td><code>set_core_properties</code></td><td><code>title</code>, <code>subject</code>, <code>author</code>, <code>keywords</code></td></tr>
+              <tr><td><code>set_placeholder_image</code></td><td><code>slide_index</code>, <code>placeholder_idx</code>, <code>path</code> + crop/position</td></tr>
+              <tr><td><code>update_table_cell</code></td><td><code>slide_index</code>, <code>table_index</code>, <code>row</code>, <code>col</code>, <code>text</code>, <code>font_size</code></td></tr>
+            </table>
+
+            <h2 id="execution">Execution semantics</h2>
+
+            <p>Operations execute in array order. By default, execution is transactional: if any operation fails, all prior changes are rolled back. Set <code>--no-transaction</code> to continue past failures.</p>
+
+            <p>The operation report shows what happened:</p>
+
+            <pre><code>{
+  "ok": true,
+  "dry_run": false,
+  "applied_count": 5,
+  "failed_index": null,
+  "events": [
+    {"index": 0, "op": "add_slide", "status": "applied", "duration_ms": 12},
+    {"index": 1, "op": "add_text", "status": "applied", "duration_ms": 3}
+  ]
+}</code></pre>
+
+            <p>On failure, <code>ok</code> is <code>false</code>, <code>failed_index</code> points to the broken operation, and the <code>detail</code> field on the failed event contains a structured error.</p>
+
+            <h2 id="errors">Error format</h2>
+
+            <p>All errors include a machine-readable code, a description, and a suggested fix:</p>
+
+            <pre><code>{
+  "code": "INVALID_BAR_STYLE",
+  "message": "Unknown bar chart style 'invalid_style'",
+  "suggested_fix": "Use one of: clustered, stacked, percent_stacked"
+}</code></pre>
+
+            <p>Error codes are stable across versions. Common codes:</p>
+
+            <table>
+              <tr><th>Code</th><th>Meaning</th></tr>
+              <tr><td><code>INVALID_SLIDE_INDEX</code></td><td>Slide index out of range</td></tr>
+              <tr><td><code>INVALID_LAYOUT_INDEX</code></td><td>Layout index out of range</td></tr>
+              <tr><td><code>INVALID_LAYOUT_NAME</code></td><td>Layout name not found in template</td></tr>
+              <tr><td><code>IMAGE_NOT_FOUND</code></td><td>Image file does not exist</td></tr>
+              <tr><td><code>INVALID_TABLE</code></td><td>Empty rows or inconsistent column counts</td></tr>
+              <tr><td><code>INVALID_COLOR_HEX</code></td><td>Not a valid 6-digit hex color</td></tr>
+              <tr><td><code>INVALID_FONT_SIZE</code></td><td>Font size outside 6-72 range</td></tr>
+              <tr><td><code>PLACEHOLDER_NOT_FOUND</code></td><td>Placeholder index not found on slide</td></tr>
+              <tr><td><code>SEMANTIC_ROLE_NOT_FOUND</code></td><td>No placeholder matches the role</td></tr>
+              <tr><td><code>UNKNOWN_OPERATION</code></td><td>Unrecognized <code>op</code> string</td></tr>
+            </table>
+
+            <p>The full error code catalog is available via <code>slides docs json</code>.</p>
+
+            <h2 id="exit-codes">Exit codes</h2>
+
+            <table>
+              <tr><th>Code</th><th>Meaning</th></tr>
+              <tr><td><code>0</code></td><td>Success</td></tr>
+              <tr><td><code>2</code></td><td>Operation batch failed</td></tr>
+              <tr><td><code>3</code></td><td>Validation error (with <code>--fail-on-error</code>)</td></tr>
+              <tr><td><code>4</code></td><td>Validation warning (with <code>--fail-on-warning</code>)</td></tr>
+              <tr><td><code>5</code></td><td>Lint failed</td></tr>
+              <tr><td><code>6</code></td><td>Edit found no matches</td></tr>
+              <tr><td><code>9</code></td><td>QA failed</td></tr>
+            </table>
+
+            <h2 id="determinism">Deterministic output</h2>
+
+            <p>By default, output is fully deterministic. Timestamps are zeroed, GUIDs are derived from content hashes, and ZIP member order is sorted. Two renders with the same input produce byte-identical output.</p>
+
+            <p><code>slides inspect --fingerprint</code> returns a SHA-256 hash over the deterministic bytes. Use it in CI to verify that a refactor didn't change output.</p>
+
+            <p>Pass <code>--non-deterministic</code> to disable this (rarely needed).</p>
+
+          </div>
+
+          <div class="toc">
+            <div class="toc-title">On this page</div>
+            <a href="#commands">Commands</a>
+            <a href="#global-flags">Global flags</a>
+            <a href="#fields" class="indent">Field masks</a>
+            <a href="#extract-cmd">extract</a>
+            <a href="#render-cmd">render</a>
+            <a href="#apply-cmd">apply</a>
+            <a href="#inspect-cmd">inspect</a>
+            <a href="#find-cmd">find</a>
+            <a href="#quality-cmds">validate, lint, qa</a>
+            <a href="#edit-cmd">edit, transform, repair</a>
+            <a href="#docs-cmd">docs</a>
+            <a href="#operations">Operations</a>
+            <a href="#ops-icons">Icons</a>
+            <a href="#ops-charts">Charts</a>
+            <a href="#execution">Execution</a>
+            <a href="#errors">Errors</a>
+            <a href="#exit-codes">Exit codes</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    </main>
+
+    <footer>
+      <div class="container footer-inner">
+        <div class="footer-left">
+          <span class="logo">agent-<span class="accent">slides</span></span>
+          <p>An agent skill for PowerPoint generation.<br />Open-source. Python 3.12+.</p>
+        </div>
+        <div class="footer-links">
+          <div class="footer-col">
+            <div class="footer-col-title">Learn</div>
+            <a href="/docs">Docs</a>
+            <a href="/examples">Examples</a>
+            <a href="/notes">Notes</a>
+          </div>
+          <div class="footer-col">
+            <div class="footer-col-title">Links</div>
+            <a href="https://pypi.org/project/agent-slides/">PyPI</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+  </body>
+</html>

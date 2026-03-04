@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>agent-slides — An AI agent skill for client-ready PowerPoint decks</title>
+    <meta name="description" content="An agent skill that generates structured, brand-compliant PowerPoint presentations. Powered by a production-grade CLI with validation, QA, and deterministic output." />
+    <meta property="og:title" content="agent-slides — AI agent skill for PowerPoint decks" />
+    <meta property="og:description" content="An agent skill that generates professional, brand-compliant presentations. Powered by a production-grade CLI with validation, QA, and deterministic output." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="agent-slides" />
+    <meta name="twitter:description" content="An AI agent skill for client-ready PowerPoint decks." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="home.css" />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <a href="#main" class="skip-link">Skip to content</a>
+
+    <!-- ── nav ──────────────────────────────────────── -->
+    <nav>
+      <div class="nav-inner">
+        <a href="/" class="logo">agent-<span class="accent">slides</span></a>
+        <div class="nav-links">
+          <a href="/docs">Docs</a>
+          <a href="/examples">Examples</a>
+          <a href="/notes">Notes</a>
+          <a href="https://pypi.org/project/agent-slides/" class="nav-cta">PyPI</a>
+        </div>
+        <button class="mobile-toggle" aria-label="Menu" aria-expanded="false" onclick="this.setAttribute('aria-expanded',this.getAttribute('aria-expanded')==='false'?'true':'false');document.querySelector('.nav-links').classList.toggle('open')">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 5h14M3 10h14M3 15h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+    </nav>
+
+    <main id="main">
+    <!-- ── hero ──────────────────────────────────────── -->
+    <header class="hero">
+      <div class="hero-grain"></div>
+      <div class="container">
+        <p class="hero-eyebrow">Open-source agent skill</p>
+        <h1>Your AI agent for<br />client-ready PowerPoint decks.</h1>
+        <p class="hero-sub">
+          An agent skill that generates professional, brand-compliant presentations&thinsp;&mdash;&thinsp;powered by a production-grade CLI with validation, QA, and deterministic output.
+        </p>
+        <div class="hero-actions">
+          <button class="install-box" onclick="navigator.clipboard.writeText('uv add agent-slides');this.classList.add('copied');setTimeout(()=>this.classList.remove('copied'),1500)" aria-label="Copy install command: uv add agent-slides">
+            <span class="prompt">$</span> uv add agent-slides
+            <span class="tooltip">Copied!</span>
+          </button>
+          <a href="/docs/getting-started" class="btn-primary">Get started</a>
+        </div>
+      </div>
+    </header>
+
+    <!-- ── what it does ──────────────────────────────── -->
+    <section class="section">
+      <div class="container">
+        <div class="outcomes-grid">
+          <div class="outcome">
+            <div class="outcome-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+            </div>
+            <h3>Brand-compliant decks</h3>
+            <p>Feed it your corporate template. The skill extracts layout rules, color zones, and font contracts&thinsp;&mdash;&thinsp;then enforces them on every slide it builds.</p>
+          </div>
+          <div class="outcome">
+            <div class="outcome-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+            </div>
+            <h3>Validated before delivery</h3>
+            <p>Every slide operation is schema-validated. A QA engine checks font sizes, contrast, overlaps, and bounds before the deck is finalized.</p>
+          </div>
+          <div class="outcome">
+            <div class="outcome-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+            <h3>Deterministic output</h3>
+            <p>Same input, same deck. No random IDs, no timestamp drift. Reproducible results you can trust in client-facing work.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── how it works ──────────────────────────────── -->
+    <section class="section bg-alt">
+      <div class="container">
+        <div class="section-header center">
+          <span class="label">How it works</span>
+          <h2>From brief to shipped deck.</h2>
+        </div>
+
+        <div class="workflow">
+          <div class="workflow-step">
+            <div class="workflow-num">01</div>
+            <div class="workflow-content">
+              <h3>Extract your template</h3>
+              <p>Run <code>/slides-extract</code> on any .pptx template. The skill analyzes layouts, colors, fonts, and spatial zones into a machine-readable contract.</p>
+            </div>
+          </div>
+          <div class="workflow-connector"></div>
+          <div class="workflow-step">
+            <div class="workflow-num">02</div>
+            <div class="workflow-content">
+              <h3>Build the deck</h3>
+              <p>Describe what you need. <code>/slides-build</code> plans the narrative, selects layouts, and compiles slide operations into your presentation.</p>
+            </div>
+          </div>
+          <div class="workflow-connector"></div>
+          <div class="workflow-step">
+            <div class="workflow-num">03</div>
+            <div class="workflow-content">
+              <h3>Audit &amp; polish</h3>
+              <p>The skill automatically audits formatting, reviews storytelling quality, and adds speaker notes&thinsp;&mdash;&thinsp;before the deck reaches anyone.</p>
+            </div>
+          </div>
+        </div>
+
+        <p class="workflow-note">
+          Or run <code>/slides-full</code> to orchestrate all stages as a single pipeline with retry loops.
+        </p>
+
+        <div class="workflow-cta">
+          <a href="/docs/getting-started" class="btn-secondary">See the full walkthrough</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── the engine underneath ─────────────────────── -->
+    <section class="section">
+      <div class="container">
+        <div class="section-header">
+          <span class="label">What makes it reliable</span>
+          <h2>Built for agent DX, not human DX.</h2>
+          <p class="section-sub">
+            Human-first CLIs optimize for discoverability. Agent-first CLIs optimize for predictability and defense-in-depth. The skill is powered by a purpose-built CLI designed for the latter.
+          </p>
+        </div>
+
+        <div class="principles-grid">
+          <div class="principle">
+            <h3>The agent is not a trusted operator</h3>
+            <p>Agents hallucinate. The CLI treats every input as untrusted: Pydantic validation, control-character rejection, path-traversal checks, and transactional execution that rolls back on failure.</p>
+          </div>
+          <div class="principle">
+            <h3>Schema introspection replaces documentation</h3>
+            <p>Static docs stuffed into context are expensive and go stale. The CLI exposes every operation, parameter, and response type as queryable JSON at runtime. The agent self-serves.</p>
+          </div>
+          <div class="principle">
+            <h3>Context-window discipline</h3>
+            <p>Agents pay per token and lose reasoning capacity with irrelevant output. Field masks, compact mode, and structured JSON keep every response minimal and machine-readable.</p>
+          </div>
+          <div class="principle">
+            <h3>Skills encode what <code>--help</code> can't</h3>
+            <p>Seven skill files encode workflow knowledge agents can't intuit: when to dry-run, how to chain stages, how to recover from errors, and what design invariants to enforce.</p>
+          </div>
+        </div>
+
+        <p class="diff-footnote">
+          <a href="/notes/agent-dx">Deep-dive into the CLI architecture &rarr;</a>
+        </p>
+      </div>
+    </section>
+
+    <!-- ── stats ─────────────────────────────────────── -->
+    <section class="section bg-dark">
+      <div class="container">
+        <div class="stats-grid">
+          <div class="stat">
+            <div class="stat-num">7</div>
+            <div class="stat-label">Composable skills</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num">50</div>
+            <div class="stat-label">Slide operations</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num">9</div>
+            <div class="stat-label">Chart types</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num">160</div>
+            <div class="stat-label">Tests</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── quick start ───────────────────────────────── -->
+    <section class="section">
+      <div class="container">
+        <div class="section-header center">
+          <span class="label">Quick start</span>
+          <h2>Install, extract, build.</h2>
+        </div>
+        <div class="quickstart">
+          <pre><code><span class="c"># Install the package</span>
+uv add agent-slides
+
+<span class="c"># Extract your corporate template</span>
+/slides-extract corporate.pptx
+
+<span class="c"># Build a full deck from a brief</span>
+/slides-full "10-slide strategy deck on Q3 growth"</code></pre>
+        </div>
+        <div class="workflow-cta">
+          <a href="/docs/getting-started" class="btn-secondary">Full getting-started guide</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── deep dive links ───────────────────────────── -->
+    <section class="section bg-alt">
+      <div class="container">
+        <div class="section-header center">
+          <span class="label">Go deeper</span>
+          <h2>The engineering behind the skill.</h2>
+        </div>
+        <div class="deep-links">
+          <a href="/docs/getting-started" class="deep-link-card">
+            <span class="deep-link-num">01</span>
+            <h3>Getting Started</h3>
+            <p>Install, extract a template, and build your first deck. From prompt to polished presentation in minutes.</p>
+            <span class="deep-link-cta">Read &rarr;</span>
+          </a>
+          <a href="/notes/agent-dx" class="deep-link-card">
+            <span class="deep-link-num">02</span>
+            <h3>Why agents need a different CLI</h3>
+            <p>Human DX and Agent DX are different problems. Why the agent needs a dedicated execution layer, not raw library access.</p>
+            <span class="deep-link-cta">Read &rarr;</span>
+          </a>
+          <a href="/notes" class="deep-link-card">
+            <span class="deep-link-num">03</span>
+            <h3>All design notes</h3>
+            <p>Design notes on JSON payloads, schema introspection, context discipline, progressive disclosure, and state-machine orchestration.</p>
+            <span class="deep-link-cta">Browse &rarr;</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── footer ────────────────────────────────────── -->
+    </main>
+
+    <footer>
+      <div class="container footer-inner">
+        <div class="footer-left">
+          <span class="logo">agent-<span class="accent">slides</span></span>
+          <p>An agent skill for PowerPoint generation.<br />Open-source. Python 3.12+.</p>
+        </div>
+        <div class="footer-links">
+          <div class="footer-col">
+            <div class="footer-col-title">Learn</div>
+            <a href="/docs">Docs</a>
+            <a href="/examples">Examples</a>
+            <a href="/notes">Notes</a>
+          </div>
+          <div class="footer-col">
+            <div class="footer-col-title">Links</div>
+            <a href="https://pypi.org/project/agent-slides/">PyPI</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+  </body>
+</html>

@@ -1,0 +1,31 @@
+name: Visual Diff
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 4 * * 1"
+
+jobs:
+  visual-diff:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+      - name: Set up Python
+        run: uv python install 3.12
+      - name: Sync dependencies
+        run: uv sync --all-groups
+      - name: Run visual diff (if render dirs exist)
+        run: |
+          if [ ! -d render-baseline ] || [ ! -d render-current ]; then
+            echo "render-baseline or render-current directory not found; skipping visual diff"
+            exit 0
+          fi
+          uv run python scripts/visual_diff.py render-baseline render-current --report visual-diff-report.json
+      - name: Upload visual diff report
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-diff-report
+          path: visual-diff-report.json
+          if-no-files-found: ignore

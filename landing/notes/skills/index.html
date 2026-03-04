@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Skills encode expertise, not instructions &mdash; agent-slides</title>
+    <meta name="description" content="Why --help isn't enough, and why skill files give agents the workflow knowledge that documentation can't convey." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../style.css" />
+    <link rel="icon" href="../../favicon.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <a href="#main" class="skip-link">Skip to content</a>
+
+    <nav>
+      <div class="nav-inner">
+        <a href="/" class="logo">agent-<span class="accent">slides</span></a>
+        <div class="nav-links">
+          <a href="/docs">Docs</a>
+          <a href="/examples">Examples</a>
+          <a href="/notes" class="active">Notes</a>
+          <a href="https://pypi.org/project/agent-slides/" class="nav-cta">PyPI</a>
+        </div>
+        <button class="mobile-toggle" aria-label="Menu" aria-expanded="false" onclick="this.setAttribute('aria-expanded',this.getAttribute('aria-expanded')==='false'?'true':'false');document.querySelector('.nav-links').classList.toggle('open')">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 5h14M3 10h14M3 15h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+    </nav>
+
+    <main id="main">
+    <div class="article">
+      <div class="container">
+        <div class="article-header">
+          <span class="label">Design note</span>
+          <h1>Skills encode expertise, not instructions.</h1>
+          <p class="section-sub">Why <code>--help</code> isn't enough, and why skill files give agents the workflow knowledge that documentation can't convey.</p>
+        </div>
+
+        <div class="article-layout">
+          <div class="prose">
+
+            <h2 id="gap">The gap between tools and expertise</h2>
+
+            <p>A CLI's <code>--help</code> output tells you what flags exist. It doesn't tell you when to use them, in what order, or what to do when things go wrong.</p>
+
+            <p>Consider a junior consultant who has access to PowerPoint. They know which buttons exist. They don't know that an action title should be a complete sentence asserting a finding, not a topic label. They don't know that three bullets per card is the right density for a board audience, or that a chart needs a gray-first color strategy with selective highlighting. A senior consultant knows these things from years of practice, and no amount of <code>--help</code> text will teach them.</p>
+
+            <p>Skill files encode this kind of knowledge. They're Markdown documents loaded into the agent's context at invocation time. They go beyond "here are the tools" and into "here's how an expert would approach this task." The skill tells the agent to check storytelling structure before generating operations, to use gray as the default chart color, to verify that every action title passes the "so what?" test.</p>
+
+            <p>Giving the agent a CLI is like giving a junior cook a kitchen full of equipment. Necessary, but insufficient. You also need the recipe.</p>
+
+            <h2 id="why-not-prompt">Why not just put this in the system prompt?</h2>
+
+            <p>Some agent frameworks encode workflow knowledge in the system prompt. This works for simple tasks but breaks down for complex multi-step workflows.</p>
+
+            <p>The context budget is one problem. A full playbook for end-to-end deck generation (storytelling principles, layout patterns, chart best practices, common mistakes, error recovery) runs to 2000+ lines. If the user just wants to edit a title on slide 7, they don't need 400 lines about chart color strategy. Loading everything every time wastes context on irrelevant instructions.</p>
+
+            <p>Maintainability is the other. System prompts are static text. Skill files are structured Markdown with YAML frontmatter, stored in version-controlled directories alongside their reference files. You can update the storytelling guidance without touching chart patterns. You can add a new reference file without modifying any skill.</p>
+
+            <p>Loading on demand solves both. When the user invokes <code>/slides-build</code>, only the build skill and its references enter context. When they invoke <code>/slides-edit</code>, only the edit skill loads. The agent gets exactly the instructions it needs.</p>
+
+            <div class="article-nav">
+              <a href="/notes/untrusted-input" class="article-nav-prev">
+                <span class="article-nav-label">Previous</span>
+                <span class="article-nav-title">Agent output as untrusted input</span>
+              </a>
+              <a href="/notes/seven-skills" class="article-nav-next">
+                <span class="article-nav-label">Next</span>
+                <span class="article-nav-title">Why seven skills, not one</span>
+              </a>
+            </div>
+
+          </div>
+
+          <div class="toc">
+            <div class="toc-title">On this page</div>
+            <a href="#gap">Tools vs. expertise</a>
+            <a href="#why-not-prompt">Why not the system prompt</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    </main>
+
+    <footer>
+      <div class="container footer-inner">
+        <div class="footer-left">
+          <span class="logo">agent-<span class="accent">slides</span></span>
+          <p>An agent skill for PowerPoint generation.<br />Open-source. Python 3.12+.</p>
+        </div>
+        <div class="footer-links">
+          <div class="footer-col">
+            <div class="footer-col-title">Learn</div>
+            <a href="/docs">Docs</a>
+            <a href="/examples">Examples</a>
+            <a href="/notes">Notes</a>
+          </div>
+          <div class="footer-col">
+            <div class="footer-col-title">Links</div>
+            <a href="https://pypi.org/project/agent-slides/">PyPI</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+  </body>
+</html>

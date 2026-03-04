@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SEA Market Expansion &mdash; Examples &mdash; agent-slides</title>
+    <meta name="description" content="A 15-slide market expansion investment case with sections, charts, tables, and scenario analysis. Generated from a single prompt." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../style.css" />
+    <link rel="icon" href="../../favicon.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <a href="#main" class="skip-link">Skip to content</a>
+
+    <nav>
+      <div class="nav-inner">
+        <a href="/" class="logo">agent-<span class="accent">slides</span></a>
+        <div class="nav-links">
+          <a href="/docs">Docs</a>
+          <a href="/examples" class="active">Examples</a>
+          <a href="/notes">Notes</a>
+          <a href="https://pypi.org/project/agent-slides/" class="nav-cta">PyPI</a>
+        </div>
+        <button class="mobile-toggle" aria-label="Menu" aria-expanded="false" onclick="this.setAttribute('aria-expanded',this.getAttribute('aria-expanded')==='false'?'true':'false');document.querySelector('.nav-links').classList.toggle('open')">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 5h14M3 10h14M3 15h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+    </nav>
+
+    <main id="main">
+    <div class="article">
+      <div class="container">
+        <div class="article-header">
+          <span class="label">Example &mdash; 15 content slides</span>
+          <h1>Southeast Asia market expansion.</h1>
+          <p class="section-sub">A comprehensive investment case for a $45M phased market entry targeting Indonesia, Vietnam, and Thailand. Three sections, four charts, two tables, and scenario analysis.</p>
+        </div>
+
+        <div class="article-layout">
+          <div class="prose">
+
+            <h2 id="prompt">The prompt</h2>
+
+            <pre><code>Create a 15-slide market expansion strategy deck
+on "Southeast Asia Market Entry" for the Executive
+Committee using /slides-full.
+
+Audience: Executive Committee and Board of Directors.
+Tone: Formal investment case (data-heavy,
+recommendation-driven).
+
+Scope: SEA digital economy overview ($218B), SaaS
+adoption trends, top 3 markets (Indonesia, Vietnam,
+Thailand = 78% of TAM), competitive fragmentation
+analysis, platform differentiation in localization
+and compliance, revenue ramp to $67M by Year 3,
+IRR 38%, 2.4-year payback, four-phase rollout plan,
+three-scenario NPV analysis, $45M investment
+recommendation.
+
+Structure with three sections (Market Landscape,
+Competitive Analysis, Financial Case). Use two bar
+charts, a line chart, and a pie chart. Include two
+data tables (competitor landscape + scenario comparison),
+three-column country profiles with icons, big-number
+KPI cards, a process flow for the rollout phases,
+and source lines on all data slides. Add speaker notes
+on the exec summary, KPI, and recommendation slides.</code></pre>
+
+            <h2 id="template">Template</h2>
+
+            <p>Source: <a href="https://powerpoint.cloud.microsoft/create/en/presentation-templates/">Microsoft free template gallery</a> &mdash; a presentation-skills themed 16:9 template with 12 layouts, photo-driven section headers, and a dark overlay aesthetic.</p>
+
+            <h2 id="result">What the agent built</h2>
+
+            <table>
+              <thead><tr><th>Metric</th><th>Value</th></tr></thead>
+              <tbody>
+                <tr><td>Content slides</td><td>15</td></tr>
+                <tr><td>Total slides</td><td>18 (+ title, disclaimer, end)</td></tr>
+                <tr><td>Charts</td><td>4 (2 bar, 1 line, 1 pie)</td></tr>
+                <tr><td>Tables</td><td>2</td></tr>
+                <tr><td>Total shapes</td><td>203</td></tr>
+                <tr><td>Section dividers</td><td>3</td></tr>
+                <tr><td>QA status</td><td>Passed (0 validation errors, 85 warnings)</td></tr>
+              </tbody>
+            </table>
+
+            <p>
+              <a href="files/output.pptx" download>Download the .pptx</a> &nbsp;&middot;&nbsp;
+              <a href="files/slides.json" download>Download slides.json</a>
+            </p>
+
+            <h2 id="structure">Deck structure</h2>
+
+            <p>The deck is organized into three sections with clear narrative progression:</p>
+
+            <h3>Opening</h3>
+            <ol>
+              <li>
+                <strong>Title slide</strong><br />
+                <span style="color:var(--muted);font-size:0.88rem">Southeast Asia Market Entry</span>
+              </li>
+              <li>
+                <strong>Executive summary</strong><br />
+                <span style="color:var(--muted);font-size:0.88rem">A $45M investment in Southeast Asia will generate $67M annual revenue by Year 3 with 38% IRR</span>
+              </li>
+            </ol>
+
+            <h3>Section 1: Market Landscape</h3>
+            <ol start="3">
+              <li><strong>Section divider</strong></li>
+              <li>
+                <strong>Bar chart</strong> &mdash; regional comparison<br />
+                <span style="color:var(--muted);font-size:0.88rem">SEA's digital economy reached $218B in 2024 and is projected to exceed $360B by 2027</span>
+              </li>
+              <li>
+                <strong>Line chart</strong> &mdash; SaaS adoption trend<br />
+                <span style="color:var(--muted);font-size:0.88rem">Enterprise SaaS adoption in SEA is accelerating at 34% CAGR, outpacing global averages</span>
+              </li>
+              <li>
+                <strong>Three-column</strong> &mdash; country profiles<br />
+                <span style="color:var(--muted);font-size:0.88rem">Indonesia, Vietnam, and Thailand represent 78% of SEA's total addressable market</span>
+              </li>
+            </ol>
+
+            <h3>Section 2: Competitive Analysis</h3>
+            <ol start="7">
+              <li><strong>Section divider</strong></li>
+              <li>
+                <strong>Pie chart</strong> &mdash; market share fragmentation<br />
+                <span style="color:var(--muted);font-size:0.88rem">No single player holds more than 12% market share, signaling high competitive fragmentation</span>
+              </li>
+              <li>
+                <strong>Table</strong> &mdash; competitor comparison<br />
+                <span style="color:var(--muted);font-size:0.88rem">Local competitors lack enterprise-grade compliance; global players underinvest in localization</span>
+              </li>
+              <li>
+                <strong>Two-column</strong> &mdash; differentiation<br />
+                <span style="color:var(--muted);font-size:0.88rem">Our platform differentiates through deep localization and regulatory compliance capabilities</span>
+              </li>
+            </ol>
+
+            <h3>Section 3: Financial Case</h3>
+            <ol start="11">
+              <li><strong>Section divider</strong></li>
+              <li>
+                <strong>Big number</strong> &mdash; IRR and payback<br />
+                <span style="color:var(--muted);font-size:0.88rem">The investment delivers 38% IRR with a 2.4-year payback period</span>
+              </li>
+              <li>
+                <strong>Bar chart</strong> &mdash; revenue ramp<br />
+                <span style="color:var(--muted);font-size:0.88rem">Revenue ramps from $8M in Year 1 to $67M by Year 3 across three markets</span>
+              </li>
+              <li>
+                <strong>Table</strong> &mdash; scenario analysis<br />
+                <span style="color:var(--muted);font-size:0.88rem">Even the bear case delivers positive NPV, confirming downside protection</span>
+              </li>
+              <li>
+                <strong>Process flow</strong> &mdash; rollout phases<br />
+                <span style="color:var(--muted);font-size:0.88rem">A four-phase rollout de-risks execution with clear stage gates</span>
+              </li>
+              <li>
+                <strong>Recommendation</strong><br />
+                <span style="color:var(--muted);font-size:0.88rem">We recommend approving $45M to capture SEA's high-growth SaaS opportunity</span>
+              </li>
+            </ol>
+
+            <h3>Closing</h3>
+            <ol start="17">
+              <li><span style="color:var(--muted);font-size:0.88rem">Disclaimer</span></li>
+              <li><span style="color:var(--muted);font-size:0.88rem">End slide</span></li>
+            </ol>
+
+            <h2 id="screenshots">Screenshots</h2>
+
+            <p>Selected slides rendered from the generated <code>.pptx</code>:</p>
+
+            <div class="slide-gallery">
+              <figure>
+                <img src="screenshots/slide_006.png" alt="Three-column country profiles for Indonesia, Vietnam, and Thailand with TAM figures" loading="lazy" />
+                <figcaption>Slide 6 &mdash; Country Profiles</figcaption>
+              </figure>
+              <figure>
+                <img src="screenshots/slide_012.png" alt="KPI dashboard showing $45M investment, 38% IRR, 2.4yr payback, $67M Year 3 revenue" loading="lazy" />
+                <figcaption>Slide 12 &mdash; Investment KPIs</figcaption>
+              </figure>
+              <figure>
+                <img src="screenshots/slide_013.png" alt="Stacked bar chart showing revenue ramp from $8M to $67M across three markets" loading="lazy" />
+                <figcaption>Slide 13 &mdash; Revenue Ramp</figcaption>
+              </figure>
+              <figure>
+                <img src="screenshots/slide_015.png" alt="Four-phase rollout process flow: Foundation, Launch, Expand, Scale with stage gates" loading="lazy" />
+                <figcaption>Slide 15 &mdash; Rollout Phases</figcaption>
+              </figure>
+            </div>
+
+            <h2 id="archetypes">Archetypes used</h2>
+
+            <table>
+              <thead><tr><th>Archetype</th><th>Count</th><th>Purpose</th></tr></thead>
+              <tbody>
+                <tr><td><code>title_slide</code></td><td>1</td><td>Cover</td></tr>
+                <tr><td><code>executive_summary</code></td><td>1</td><td>Upfront conclusion</td></tr>
+                <tr><td><code>section_divider</code></td><td>3</td><td>Section transitions</td></tr>
+                <tr><td><code>bar_chart</code></td><td>2</td><td>Regional economy, revenue ramp</td></tr>
+                <tr><td><code>line_chart</code></td><td>1</td><td>SaaS adoption trend</td></tr>
+                <tr><td><code>pie_chart</code></td><td>1</td><td>Market share fragmentation</td></tr>
+                <tr><td><code>three_column</code></td><td>1</td><td>Country profiles</td></tr>
+                <tr><td><code>two_column</code></td><td>1</td><td>Differentiation</td></tr>
+                <tr><td><code>table</code></td><td>2</td><td>Competitor + scenario data</td></tr>
+                <tr><td><code>big_number</code></td><td>1</td><td>IRR and payback KPIs</td></tr>
+                <tr><td><code>process_flow</code></td><td>1</td><td>Rollout phases</td></tr>
+                <tr><td><code>content_text</code></td><td>1</td><td>Recommendation</td></tr>
+                <tr><td><code>disclaimer</code></td><td>1</td><td>Legal</td></tr>
+                <tr><td><code>end_slide</code></td><td>1</td><td>Close</td></tr>
+              </tbody>
+            </table>
+
+            <h2 id="reproduce">Reproduce it</h2>
+
+            <pre><code><span class="c"># 1. Download the template from Microsoft</span>
+
+<span class="c"># 2. Extract</span>
+/slides-extract example3.pptx
+
+<span class="c"># 3. Build (paste the prompt above)</span>
+/slides-full "15-slide market expansion strategy ..."
+
+<span class="c"># Or render from the JSON directly</span>
+slides render \
+  --slides-json @slides.json \
+  --profile design-profile.json \
+  --output output.pptx</code></pre>
+
+            <div class="article-nav">
+              <a href="/examples/project-aurora">
+                <span class="article-nav-label">Previous example</span>
+                <span class="article-nav-title">&larr; Product launch strategy</span>
+              </a>
+              <div></div>
+            </div>
+          </div>
+
+          <div class="toc">
+            <div class="toc-title">On this page</div>
+            <a href="#prompt">The prompt</a>
+            <a href="#template">Template</a>
+            <a href="#result">What was built</a>
+            <a href="#structure">Deck structure</a>
+            <a href="#screenshots">Screenshots</a>
+            <a href="#archetypes">Archetypes used</a>
+            <a href="#reproduce">Reproduce it</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    </main>
+
+    <footer>
+      <div class="container footer-inner">
+        <div class="footer-left">
+          <span class="logo">agent-<span class="accent">slides</span></span>
+          <p>An agent skill for PowerPoint generation.<br />Open-source. Python 3.12+.</p>
+        </div>
+        <div class="footer-links">
+          <div class="footer-col">
+            <div class="footer-col-title">Learn</div>
+            <a href="/docs">Docs</a>
+            <a href="/examples">Examples</a>
+            <a href="/notes">Notes</a>
+          </div>
+          <div class="footer-col">
+            <div class="footer-col-title">Links</div>
+            <a href="https://pypi.org/project/agent-slides/">PyPI</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+  </body>
+</html>

@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Treating agent output as untrusted input &mdash; agent-slides</title>
+    <meta name="description" content="Why agent-driven CLIs should validate with the same rigor as a public API, and why design taste must be replaced with machine-readable contracts." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../style.css" />
+    <link rel="icon" href="../../favicon.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <a href="#main" class="skip-link">Skip to content</a>
+
+    <nav>
+      <div class="nav-inner">
+        <a href="/" class="logo">agent-<span class="accent">slides</span></a>
+        <div class="nav-links">
+          <a href="/docs">Docs</a>
+          <a href="/examples">Examples</a>
+          <a href="/notes" class="active">Notes</a>
+          <a href="https://pypi.org/project/agent-slides/" class="nav-cta">PyPI</a>
+        </div>
+        <button class="mobile-toggle" aria-label="Menu" aria-expanded="false" onclick="this.setAttribute('aria-expanded',this.getAttribute('aria-expanded')==='false'?'true':'false');document.querySelector('.nav-links').classList.toggle('open')">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 5h14M3 10h14M3 15h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+    </nav>
+
+    <main id="main">
+    <div class="article">
+      <div class="container">
+        <div class="article-header">
+          <span class="label">Design note</span>
+          <h1>Treating agent output as untrusted input.</h1>
+          <p class="section-sub">Why agent-driven CLIs should validate with the same rigor as a public API, and why design taste must be replaced with machine-readable contracts.</p>
+        </div>
+
+        <div class="article-layout">
+          <div class="prose">
+
+            <h2 id="untrusted-input">The agent is not a trusted operator</h2>
+
+            <p>Most agent tooling assumes the agent knows what it's doing. It executes whatever the agent sends and surfaces errors after the fact. Wrong model.</p>
+
+            <p>Agents hallucinate. They invent parameter names, pass strings where numbers are expected, reference slide indices that don't exist. They embed control characters that break OOXML (Office Open XML) and construct file paths that traverse directories. These aren't edge cases. They happen regularly, especially when the agent is working near the boundaries of its context.</p>
+
+            <p>The right model is to treat agent output as untrusted input, with the same rigor you'd apply to a public API request from an unknown client. In agent-slides, this means:</p>
+
+            <ul>
+              <li>Typed schemas with <code>extra="forbid"</code>, so a typo like <code>fon_size</code> is caught at deserialization, not three operations later when the render fails</li>
+              <li>Transactional execution: if operation #7 fails, #1-6 are rolled back</li>
+              <li>Path traversal checks and control character rejection</li>
+              <li>Structured error responses with the operation index, error code, and a suggested fix</li>
+            </ul>
+
+            <p>The error responses matter more than you'd think. A Python traceback tells the agent "something went wrong." A response like <code>{"detail": "SLIDE_INDEX_OUT_OF_RANGE: slide_index=5 but deck has 3 slides", "suggestion": "Use slide_index between 0 and 2"}</code> tells the agent what happened and how to fix it. The agent can parse the error, adjust its payload, and retry. Validation failures become feedback, not dead ends.</p>
+
+            <p>There's also a dry-run mode. The agent can validate every operation against the current deck state without writing to disk. If the dry run passes, the real run will pass too. If it doesn't, the agent gets the same structured errors without wasting a render cycle.</p>
+
+            <h2 id="design-contracts">Design contracts, not design taste</h2>
+
+            <p>A human presentation author has taste. They know that 8pt body text is unreadable, that six fonts on one slide looks chaotic, that white text on a pale background is invisible. They absorbed these rules unconsciously over years of seeing good and bad presentations.</p>
+
+            <p>Agents don't have taste. They optimize for whatever the prompt asks for. If the prompt says "fit this content on one slide," the agent will shrink text to 7pt, overlap shapes, and use any color that's technically valid. Nothing in the model's training makes it viscerally dislike bad typography.</p>
+
+            <p>You can put rules in the prompt, but prompt rules are suggestions. The agent follows them most of the time, but under pressure (tight content, complex layouts, long context), it cuts corners. Silently.</p>
+
+            <p>A design profile solves this by externalizing the rules into a machine-readable contract. Minimum and maximum font sizes per element type. Allowed colors. Minimum contrast ratios. Maximum overlap thresholds. The lint engine checks every shape in the rendered deck against these constraints and reports violations as structured JSON.</p>
+
+            <p>Think of it like ESLint for slides. ESLint doesn't prevent you from writing bad JavaScript, but it catches patterns that experienced developers know to avoid. A design profile encodes what "professional-looking slide" means in a contract that agents are held to, not asked to follow.</p>
+
+            <div class="article-nav">
+              <a href="/notes/context-budget" class="article-nav-prev">
+                <span class="article-nav-label">Previous</span>
+                <span class="article-nav-title">Context-window discipline</span>
+              </a>
+              <a href="/notes/skills" class="article-nav-next">
+                <span class="article-nav-label">Next</span>
+                <span class="article-nav-title">Skills encode expertise, not instructions</span>
+              </a>
+            </div>
+
+          </div>
+
+          <div class="toc">
+            <div class="toc-title">On this page</div>
+            <a href="#untrusted-input">Untrusted operator</a>
+            <a href="#design-contracts">Design contracts</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    </main>
+
+    <footer>
+      <div class="container footer-inner">
+        <div class="footer-left">
+          <span class="logo">agent-<span class="accent">slides</span></span>
+          <p>An agent skill for PowerPoint generation.<br />Open-source. Python 3.12+.</p>
+        </div>
+        <div class="footer-links">
+          <div class="footer-col">
+            <div class="footer-col-title">Learn</div>
+            <a href="/docs">Docs</a>
+            <a href="/examples">Examples</a>
+            <a href="/notes">Notes</a>
+          </div>
+          <div class="footer-col">
+            <div class="footer-col-title">Links</div>
+            <a href="https://pypi.org/project/agent-slides/">PyPI</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+  </body>
+</html>
