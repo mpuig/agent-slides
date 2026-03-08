@@ -1,7 +1,7 @@
 ---
 name: slides-full
 description: End-to-end deck pipeline — extract, build, audit, critique, and polish in one pass. Use when the user wants a complete deck from scratch with a template, says "create a full deck", "build me a presentation end to end", "make a polished deck from this template", or provides both a brief and a template and expects a finished, presentation-ready result. Prefer this over chaining individual skills manually.
-compatibility: Requires Python 3.12+, uv, and agent-slides in the current workspace.
+compatibility: Requires Python 3.12+ and uv.
 ---
 
 # Slides Full
@@ -63,7 +63,7 @@ Otherwise run:
 
 ```bash
 mkdir -p output/<project>
-uv run slides extract <template.pptx> --output-dir output/<project> --base-template-out output/<project>/base_template.pptx --compact
+uvx --from git+https://github.com/mpuig/agent-slides slides extract <template.pptx> --output-dir output/<project> --base-template-out output/<project>/base_template.pptx --compact
 ```
 
 **Comprehension gate** — after extraction, read `resolved_manifest.json` and confirm:
@@ -89,7 +89,7 @@ If any answer is unclear, re-read the manifest before proceeding.
 }
 ```
 
-Add `"icon_pack_dir": "icons"` if extraction produced an `icons/` directory. Use `uv run slides docs schema:design-profile` for the full schema. Only add fields listed in the schema — the profile uses `extra="forbid"`.
+Add `"icon_pack_dir": "icons"` if extraction produced an `icons/` directory. Use `uvx --from git+https://github.com/mpuig/agent-slides slides docs schema:design-profile` for the full schema. Only add fields listed in the schema — the profile uses `extra="forbid"`.
 
 ### Step 2) Build
 
@@ -102,8 +102,8 @@ Generate `slides.json` and render. Follow the `/slides-build` skill rules:
 - **Lock font sizes** before generating ops (see build skill's font size contract table).
 
 ```bash
-uv run slides render --slides-json @slides.json --profile design-profile.json --dry-run --compact
-uv run slides render --slides-json @slides.json --profile design-profile.json --output output/<project>/output.pptx --compact
+uvx --from git+https://github.com/mpuig/agent-slides slides render --slides-json @slides.json --profile design-profile.json --dry-run --compact
+uvx --from git+https://github.com/mpuig/agent-slides slides render --slides-json @slides.json --profile design-profile.json --output output/<project>/output.pptx --compact
 ```
 
 ### Step 3) Global Content Check
@@ -111,7 +111,7 @@ uv run slides render --slides-json @slides.json --profile design-profile.json --
 Run global checks on `slides.json`:
 
 ```bash
-uv run slides plan-inspect --slides-json @slides.json --out output/<project>/plan_content.json --compact
+uvx --from git+https://github.com/mpuig/agent-slides slides plan-inspect --slides-json @slides.json --out output/<project>/plan_content.json --compact
 ```
 
 Use this file for storytelling checks:
@@ -129,14 +129,14 @@ Use `--content-only` or `--summary-only` only when drilling into specific subset
 Run technical and visual checks on the rendered deck:
 
 ```bash
-uv run slides lint output/<project>/output.pptx --profile design-profile.json --slides-json @slides.json --out output/<project>/lint.json --compact
-uv run slides qa output/<project>/output.pptx --profile design-profile.json --slides-json @slides.json --out output/<project>/qa.json --compact
+uvx --from git+https://github.com/mpuig/agent-slides slides lint output/<project>/output.pptx --profile design-profile.json --slides-json @slides.json --out output/<project>/lint.json --compact
+uvx --from git+https://github.com/mpuig/agent-slides slides qa output/<project>/output.pptx --profile design-profile.json --slides-json @slides.json --out output/<project>/qa.json --compact
 ```
 
 If needed, inspect one page/slide at a time:
 
 ```bash
-uv run slides inspect output/<project>/output.pptx --page-size 1 --page-token <n> --out output/<project>/inspect_page.json --compact
+uvx --from git+https://github.com/mpuig/agent-slides slides inspect output/<project>/output.pptx --page-size 1 --page-token <n> --out output/<project>/inspect_page.json --compact
 ```
 
 Cross-check against common mistakes #6-13 (visual hierarchy, template colors, overlap, bounds).
@@ -151,7 +151,7 @@ Build fixes by class:
 Apply with small, reversible patches:
 
 ```bash
-uv run slides apply output/<project>/output.pptx --ops-json @output/<project>/fixes_ops.json --output output/<project>/output.pptx --compact
+uvx --from git+https://github.com/mpuig/agent-slides slides apply output/<project>/output.pptx --ops-json @output/<project>/fixes_ops.json --output output/<project>/output.pptx --compact
 ```
 
 ### Step 6) Recheck Loop
@@ -204,7 +204,7 @@ Report:
 
 ## Error Handling
 
-On any slides error, run `uv run slides docs method:render` or `uv run slides docs method:extract` to verify the current contract before retrying.
+On any slides error, run `uvx --from git+https://github.com/mpuig/agent-slides slides docs method:render` or `uvx --from git+https://github.com/mpuig/agent-slides slides docs method:extract` to verify the current contract before retrying.
 
 ## Acceptance Criteria
 

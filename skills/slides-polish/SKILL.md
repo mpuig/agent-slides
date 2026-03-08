@@ -1,7 +1,7 @@
 ---
 name: slides-polish
 description: Final pass before shipping a deck. Ensures speaker notes, metadata, sources, disclaimer, and consistent formatting are all in place. Use when the user says "polish the deck", "add speaker notes", "finalize the presentation", "make it ready to send", "check sources and footnotes", or the deck is content-complete but needs a finishing pass.
-compatibility: Requires Python 3.12+, uv, and agent-slides in the current workspace.
+compatibility: Requires Python 3.12+ and uv.
 ---
 
 # Slides Polish
@@ -49,7 +49,7 @@ This prevents unnecessary changes on decks that are already well-polished.
 Inspect the deck:
 
 ```bash
-uv run slides inspect output.pptx --page-all --compact \
+uvx --from git+https://github.com/mpuig/agent-slides slides inspect output.pptx --page-all --compact \
   --fields slides.slide_index,slides.title,slides.layout_name,slides.placeholders,slides.shapes.text,slides.shapes.font_sizes_pt,slides.shapes.font_colors_hex
 ```
 
@@ -133,13 +133,13 @@ Read `design-profile.json` for the expected values, then verify:
 ### Step 5) Apply fixes
 
 ```bash
-uv run slides apply output.pptx --ops-json @polish-fixes.json --output output.pptx --compact
+uvx --from git+https://github.com/mpuig/agent-slides slides apply output.pptx --ops-json @polish-fixes.json --output output.pptx --compact
 ```
 
 ### Step 6) Final QA gate
 
 ```bash
-uv run slides qa output.pptx --profile design-profile.json --out qa.json --compact
+uvx --from git+https://github.com/mpuig/agent-slides slides qa output.pptx --profile design-profile.json --out qa.json --compact
 ```
 
 ### Step 7) Report
@@ -180,7 +180,7 @@ QA Status: ok
 
 ## Error Handling
 
-On any slides error, run `uv run slides docs method:render` to verify the current contract.
+On any slides error, run `uvx --from git+https://github.com/mpuig/agent-slides slides docs method:render` to verify the current contract.
 
 ## Acceptance Criteria
 

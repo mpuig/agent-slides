@@ -1,0 +1,26 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "agent-slides",
+  "metadata": {
+    "description": "Agent skill for professional PowerPoint decks. 7 composable skills and a purpose-built CLI to extract templates, build from prompts, audit, critique, and polish presentations."
+  },
+  "owner": {
+    "name": "Marc Puig",
+    "email": "marc.puig@gmail.com"
+  },
+  "plugins": [
+    {
+      "name": "agent-slides",
+      "description": "Agent skill for generating professional PowerPoint decks. 7 composable skills (extract, build, edit, audit, critique, polish, full) powered by a purpose-built CLI and Python API.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Marc Puig",
+        "email": "marc.puig@gmail.com"
+      },
+      "source": "./",
+      "category": "productivity",
+      "homepage": "https://agent-slides.com",
+      "tags": ["slides", "powerpoint", "pptx", "presentations", "agent", "skills"]
+    }
+  ]
+}

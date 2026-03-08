@@ -1,0 +1,12 @@
+{
+  "name": "agent-slides",
+  "description": "Agent skill for generating professional PowerPoint decks. 7 composable skills (extract, build, edit, audit, critique, polish, full) powered by a purpose-built CLI and Python API.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Marc Puig",
+    "email": "marc.puig@gmail.com"
+  },
+  "homepage": "https://agent-slides.com",
+  "repository": "https://github.com/mpuig/agent-slides",
+  "skills": "./skills"
+}

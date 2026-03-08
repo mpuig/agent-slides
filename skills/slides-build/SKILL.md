@@ -1,7 +1,7 @@
 ---
 name: slides-build
 description: Build a complete presentation deck from a brief. Generates storytelling plan, slide operations, renders the deck, and runs QA. Requires extracted template contracts from /slides-extract. Use when the user wants to create slides, build a deck, generate a presentation, write a strategy deck, or says things like "make me a 10-slide deck on X", "create a presentation about Y", "build slides for the board meeting".
-compatibility: Requires Python 3.12+, uv, and agent-slides in the current workspace.
+compatibility: Requires Python 3.12+ and uv.
 ---
 
 # Slides Build
@@ -129,7 +129,7 @@ Skip references that don't match any planned slide. This keeps context lean for 
 
 `DeckPlan` fields: `deck_title` (required), `brief` (required), `slides` (required), plus optional `audience`, `objective`, `assumptions`.
 
-Use `uv run slides docs schema:slides-document` for full schema, `uv run slides docs method:render` for operation inventory.
+Use `uvx --from git+https://github.com/mpuig/agent-slides slides docs schema:slides-document` for full schema, `uvx --from git+https://github.com/mpuig/agent-slides slides docs method:render` for operation inventory.
 
 #### Ops Generation Rules
 
@@ -202,13 +202,13 @@ Use `uv run slides docs schema:slides-document` for full schema, `uv run slides 
 ### Step 3) Dry-run (required)
 
 ```bash
-uv run slides render --slides-json @slides.json --profile design-profile.json --dry-run --compact
+uvx --from git+https://github.com/mpuig/agent-slides slides render --slides-json @slides.json --profile design-profile.json --dry-run --compact
 ```
 
 ### Step 4) Render
 
 ```bash
-uv run slides render --slides-json @slides.json --profile design-profile.json --output output.pptx --compact
+uvx --from git+https://github.com/mpuig/agent-slides slides render --slides-json @slides.json --profile design-profile.json --output output.pptx --compact
 ```
 
 ### Step 5) QA gate (required)
@@ -216,7 +216,7 @@ uv run slides render --slides-json @slides.json --profile design-profile.json --
 **Read `references/common-mistakes.md` and review the pre-generation checklist.**
 
 ```bash
-uv run slides qa output.pptx --profile design-profile.json \
+uvx --from git+https://github.com/mpuig/agent-slides slides qa output.pptx --profile design-profile.json \
   --slides-json @slides.json --out qa.json --compact
 ```
 
@@ -249,7 +249,7 @@ Check `resolved_manifest.json` -> archetype -> `resolved_layouts` -> `title_regi
 
 ## Error Handling
 
-On any slides error, run `uv run slides docs method:render` or `uv run slides docs schema:slides-document` to verify the current contract before retrying.
+On any slides error, run `uvx --from git+https://github.com/mpuig/agent-slides slides docs method:render` or `uvx --from git+https://github.com/mpuig/agent-slides slides docs schema:slides-document` to verify the current contract before retrying.
 
 ## Acceptance Criteria
 

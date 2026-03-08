@@ -1,7 +1,7 @@
 ---
 name: slides-edit
 description: Edit an existing presentation deck. Supports text edits, layout transforms, and ops-based patches. Use when the user wants to change text on a slide, update a title, fix a typo, swap a layout, replace chart data, add or remove slides, or says things like "change slide 3 title to X", "update the numbers on the chart", "move the agenda slide".
-compatibility: Requires Python 3.12+, uv, and agent-slides in the current workspace.
+compatibility: Requires Python 3.12+ and uv.
 ---
 
 # Slides Edit
@@ -39,7 +39,7 @@ All subsequent commands run from within the project directory.
 Inspect the deck to find slide/shape UIDs:
 
 ```bash
-uv run slides inspect output.pptx \
+uvx --from git+https://github.com/mpuig/agent-slides slides inspect output.pptx \
   --fields slides.slide_uid,slides.shapes.shape_uid,slides.title \
   --out ids.json --compact
 ```
@@ -47,21 +47,21 @@ uv run slides inspect output.pptx \
 Search for specific text:
 
 ```bash
-uv run slides find output.pptx --query "<search text>" --limit 10 \
+uvx --from git+https://github.com/mpuig/agent-slides slides find output.pptx --query "<search text>" --limit 10 \
   --out find.json --compact
 ```
 
 Pagination for large decks:
 
 ```bash
-uv run slides inspect output.pptx --page-size 5 --page-token 0 --compact
+uvx --from git+https://github.com/mpuig/agent-slides slides inspect output.pptx --page-size 5 --page-token 0 --compact
 ```
 
 Other inspection:
 
 ```bash
-uv run slides inspect output.pptx --placeholders 0 --compact   # placeholders on slide 0
-uv run slides inspect output.pptx --summary --compact           # deck summary
+uvx --from git+https://github.com/mpuig/agent-slides slides inspect output.pptx --placeholders 0 --compact   # placeholders on slide 0
+uvx --from git+https://github.com/mpuig/agent-slides slides inspect output.pptx --summary --compact           # deck summary
 ```
 
 ### Step 2) Pre-edit assessment
@@ -79,7 +79,7 @@ This prevents over-editing and protects existing quality.
 **Text edits** (find-and-replace scoped by UID):
 
 ```bash
-uv run slides edit output.pptx --query "old text" \
+uvx --from git+https://github.com/mpuig/agent-slides slides edit output.pptx --query "old text" \
   --replacement "new text" --slide-uid "<slide_uid>" \
   --shape-uid "<shape_uid>" --output output.pptx --compact
 ```
@@ -89,14 +89,14 @@ Alternative selectors: `--slide <index>`, `--slide-id <slide-N>`, `--shape-id <s
 **Archetype transforms** (restyle a slide):
 
 ```bash
-uv run slides transform output.pptx --slide-uid "<slide_uid>" \
+uvx --from git+https://github.com/mpuig/agent-slides slides transform output.pptx --slide-uid "<slide_uid>" \
   --to timeline --output output.pptx --compact
 ```
 
 **Ops-based patches** (apply additional operations):
 
 ```bash
-uv run slides apply output.pptx --ops-json @patch_ops.json --output output.pptx --compact
+uvx --from git+https://github.com/mpuig/agent-slides slides apply output.pptx --ops-json @patch_ops.json --output output.pptx --compact
 ```
 
 Write `patch_ops.json` as:
@@ -112,20 +112,20 @@ Write `patch_ops.json` as:
 ### Step 4) Verify changes
 
 ```bash
-uv run slides find output.pptx --query "new text" --compact
+uvx --from git+https://github.com/mpuig/agent-slides slides find output.pptx --query "new text" --compact
 ```
 
 ### Step 5) Re-run QA
 
 ```bash
-uv run slides qa output.pptx --profile design-profile.json \
+uvx --from git+https://github.com/mpuig/agent-slides slides qa output.pptx --profile design-profile.json \
   --slides-json @slides.json --out qa.json --compact
 ```
 
 ### Step 6) Repair (if needed)
 
 ```bash
-uv run slides repair output.pptx --output output.pptx
+uvx --from git+https://github.com/mpuig/agent-slides slides repair output.pptx --output output.pptx
 ```
 
 ## Placeholder Rules
@@ -144,7 +144,7 @@ uv run slides repair output.pptx --output output.pptx
 
 ## Error Handling
 
-On any slides error, run `uv run slides docs method:edit` to verify the current contract before retrying.
+On any slides error, run `uvx --from git+https://github.com/mpuig/agent-slides slides docs method:edit` to verify the current contract before retrying.
 
 ## Acceptance Criteria
 
