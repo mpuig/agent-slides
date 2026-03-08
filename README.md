@@ -26,13 +26,13 @@ agent-slides encodes that knowledge in 7 composable skills, backed by a CLI that
 
 ### The CLI
 
-Skills call `uvx --from git+https://github.com/mpuig/agent-slides slides ...` under the hood. The CLI provides:
+Skills call `uvx --from agent-slides slides ...` under the hood. The CLI provides:
 
 - Declarative JSON operations with dry-run and transactional rollback
 - Template extraction (layouts, archetypes, color zones, icons)
 - Validation, linting, and QA with design profiles
 - Agent-optimized output (compact JSON, pagination, field masking)
-- Runtime schema discovery (`uvx --from git+https://github.com/mpuig/agent-slides slides docs json`)
+- Runtime schema discovery (`uvx --from agent-slides slides docs json`)
 
 ## Installation
 
@@ -40,7 +40,7 @@ Skills call `uvx --from git+https://github.com/mpuig/agent-slides slides ...` un
 npx skills add https://github.com/mpuig/agent-slides
 ```
 
-This installs the skills for Claude Code, Cursor, Gemini CLI, or Codex CLI — your choice. Skills call `uvx --from git+https://github.com/mpuig/agent-slides slides ...` under the hood, so make sure [uv](https://docs.astral.sh/uv/) is available in your environment.
+This installs the skills for Claude Code, Cursor, Gemini CLI, or Codex CLI — your choice. Skills call `uvx --from agent-slides slides ...` under the hood, so make sure [uv](https://docs.astral.sh/uv/) is available in your environment.
 
 ## Usage
 
@@ -57,22 +57,22 @@ Or use the CLI directly:
 
 ```bash
 # Render a deck from a slides document
-uvx --from git+https://github.com/mpuig/agent-slides slides render --slides-json @slides.json --profile design-profile.json --output out.pptx
+uvx --from agent-slides slides render --slides-json @slides.json --profile design-profile.json --output out.pptx
 
 # Extract template contracts
-uvx --from git+https://github.com/mpuig/agent-slides slides extract template.pptx --output-dir extracted
+uvx --from agent-slides slides extract template.pptx --output-dir extracted
 
 # Validate and lint
-uvx --from git+https://github.com/mpuig/agent-slides slides validate out.pptx
-uvx --from git+https://github.com/mpuig/agent-slides slides lint out.pptx --profile design-profile.json --out lint.json
+uvx --from agent-slides slides validate out.pptx
+uvx --from agent-slides slides lint out.pptx --profile design-profile.json --out lint.json
 
 # Inspect and search
-uvx --from git+https://github.com/mpuig/agent-slides slides inspect out.pptx --summary
-uvx --from git+https://github.com/mpuig/agent-slides slides find out.pptx --query "pricing" --out results.json
+uvx --from agent-slides slides inspect out.pptx --summary
+uvx --from agent-slides slides find out.pptx --query "pricing" --out results.json
 
 # Schema discovery
-uvx --from git+https://github.com/mpuig/agent-slides slides docs json
-uvx --from git+https://github.com/mpuig/agent-slides slides docs schema:slides-document
+uvx --from agent-slides slides docs json
+uvx --from agent-slides slides docs schema:slides-document
 ```
 
 ## Typical Workflow

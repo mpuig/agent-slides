@@ -49,7 +49,7 @@ This prevents unnecessary changes on decks that are already well-polished.
 Inspect the deck:
 
 ```bash
-uvx --from git+https://github.com/mpuig/agent-slides slides inspect output.pptx --page-all --compact \
+uvx --from agent-slides slides inspect output.pptx --page-all --compact \
   --fields slides.slide_index,slides.title,slides.layout_name,slides.placeholders,slides.shapes.text,slides.shapes.font_sizes_pt,slides.shapes.font_colors_hex
 ```
 
@@ -133,13 +133,13 @@ Read `design-profile.json` for the expected values, then verify:
 ### Step 5) Apply fixes
 
 ```bash
-uvx --from git+https://github.com/mpuig/agent-slides slides apply output.pptx --ops-json @polish-fixes.json --output output.pptx --compact
+uvx --from agent-slides slides apply output.pptx --ops-json @polish-fixes.json --output output.pptx --compact
 ```
 
 ### Step 6) Final QA gate
 
 ```bash
-uvx --from git+https://github.com/mpuig/agent-slides slides qa output.pptx --profile design-profile.json --out qa.json --compact
+uvx --from agent-slides slides qa output.pptx --profile design-profile.json --out qa.json --compact
 ```
 
 ### Step 7) Report
@@ -180,7 +180,7 @@ QA Status: ok
 
 ## Error Handling
 
-On any slides error, run `uvx --from git+https://github.com/mpuig/agent-slides slides docs method:render` to verify the current contract.
+On any slides error, run `uvx --from agent-slides slides docs method:render` to verify the current contract.
 
 ## Acceptance Criteria
 

@@ -123,13 +123,6 @@ for ref_file in "$REFS_DIR"/*.md; do
   fi
 done
 
-# Rewrite git+https URLs to PyPI package name for Claude app sandbox (no git)
-for ref_file in "$REFS_DIR"/*.md "$PACKAGE_DIR/SKILL.md"; do
-  [ -f "$ref_file" ] || continue
-  sed -i.bak 's|uvx --from git+https://github.com/mpuig/agent-slides slides|uvx --from agent-slides slides|g' "$ref_file"
-  rm -f "$ref_file.bak"
-done
-
 # Create the ZIP
 mkdir -p "$OUTPUT_DIR"
 rm -f "$OUTPUT_DIR/agent-slides.zip"

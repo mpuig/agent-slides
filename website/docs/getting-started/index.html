@@ -63,7 +63,7 @@ git clone https://github.com/mpuig/agent-slides.git
 <span class="c"># Symlink skills into your agent's skill directory</span>
 ln -s agent-slides/skills/* .claude/skills/</code></pre>
 
-            <p>Requires <a href="https://docs.astral.sh/uv/">uv</a> to be available in your environment. The skills invoke the CLI via <code>uvx --from git+https://github.com/mpuig/agent-slides slides</code>, which resolves and caches the package automatically.</p>
+            <p>Requires <a href="https://docs.astral.sh/uv/">uv</a> to be available in your environment. The skills invoke the CLI via <code>uvx --from agent-slides slides</code>, which resolves and caches the package automatically.</p>
 
             <h2 id="prepare">Prepare your template</h2>
 
@@ -83,8 +83,7 @@ ln -s agent-slides/skills/* .claude/skills/</code></pre>
 
             <p>You can also run extraction directly from the CLI:</p>
 
-            <pre><code>uvx --from git+https://github.com/mpuig/agent-slides \
-  slides extract "template.pptx" --output-dir project/</code></pre>
+            <pre><code>uvx --from agent-slides slides extract "template.pptx" --output-dir project/</code></pre>
 
             <h2 id="build">Build your first deck</h2>
 
@@ -140,7 +139,7 @@ ln -s agent-slides/skills/* .claude/skills/</code></pre>
             <h3>Key commands</h3>
 
             <pre><code><span class="c"># Shorthand: alias the CLI</span>
-alias slides='uvx --from git+https://github.com/mpuig/agent-slides slides'
+alias slides='uvx --from agent-slides slides'
 
 <span class="c"># Render a slides.json into a .pptx</span>
 slides render --slides-json @slides.json \

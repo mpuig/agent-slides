@@ -129,7 +129,7 @@ Skip references that don't match any planned slide. This keeps context lean for 
 
 `DeckPlan` fields: `deck_title` (required), `brief` (required), `slides` (required), plus optional `audience`, `objective`, `assumptions`.
 
-Use `uvx --from git+https://github.com/mpuig/agent-slides slides docs schema:slides-document` for full schema, `uvx --from git+https://github.com/mpuig/agent-slides slides docs method:render` for operation inventory.
+Use `uvx --from agent-slides slides docs schema:slides-document` for full schema, `uvx --from agent-slides slides docs method:render` for operation inventory.
 
 #### Ops Generation Rules
 
@@ -202,13 +202,13 @@ Use `uvx --from git+https://github.com/mpuig/agent-slides slides docs schema:sli
 ### Step 3) Dry-run (required)
 
 ```bash
-uvx --from git+https://github.com/mpuig/agent-slides slides render --slides-json @slides.json --profile design-profile.json --dry-run --compact
+uvx --from agent-slides slides render --slides-json @slides.json --profile design-profile.json --dry-run --compact
 ```
 
 ### Step 4) Render
 
 ```bash
-uvx --from git+https://github.com/mpuig/agent-slides slides render --slides-json @slides.json --profile design-profile.json --output output.pptx --compact
+uvx --from agent-slides slides render --slides-json @slides.json --profile design-profile.json --output output.pptx --compact
 ```
 
 ### Step 5) QA gate (required)
@@ -216,7 +216,7 @@ uvx --from git+https://github.com/mpuig/agent-slides slides render --slides-json
 **Read `references/common-mistakes.md` and review the pre-generation checklist.**
 
 ```bash
-uvx --from git+https://github.com/mpuig/agent-slides slides qa output.pptx --profile design-profile.json \
+uvx --from agent-slides slides qa output.pptx --profile design-profile.json \
   --slides-json @slides.json --out qa.json --compact
 ```
 
@@ -249,7 +249,7 @@ Check `resolved_manifest.json` -> archetype -> `resolved_layouts` -> `title_regi
 
 ## Error Handling
 
-On any slides error, run `uvx --from git+https://github.com/mpuig/agent-slides slides docs method:render` or `uvx --from git+https://github.com/mpuig/agent-slides slides docs schema:slides-document` to verify the current contract before retrying.
+On any slides error, run `uvx --from agent-slides slides docs method:render` or `uvx --from agent-slides slides docs schema:slides-document` to verify the current contract before retrying.
 
 ## Acceptance Criteria
 
