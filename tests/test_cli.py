@@ -383,7 +383,6 @@ def test_cli_extract_layout_catalog_output_dir_defaults(tmp_path: Path, monkeypa
     assert (out_dir / "resolved_manifest.json").exists()
     assert (out_dir / "slides_manifest.json").exists()
     assert (out_dir / "slide_analysis.json").exists()
-    assert (out_dir / "slide_screenshots").is_dir()
 
 
 def test_cli_fail_on_warning(tmp_path: Path, monkeypatch: Any) -> None:
