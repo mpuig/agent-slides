@@ -8,6 +8,7 @@ htmlcov/
 coverage.xml
 .coverage
 *.pptx
+!examples/*.pptx
 .idea
 .DS_Store
 /visual-diff-report.json
@@ -15,8 +16,8 @@ coverage.xml
 /.agents/
 /.claude/
 /output/
+/examples/output/
 /resolved_manifest.json
 /slide_analysis.json
 /slides_manifest.json
-/server/data/
 /assets-private/

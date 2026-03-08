@@ -1,7 +1,7 @@
 ---
 name: slides-extract
 description: Extract template contracts from a .pptx file. Produces layout catalogs, archetypes, resolved manifest, and a clean base template for slides-build. Use when the user provides a PowerPoint template, says "use this template", "extract layouts", "analyze this pptx", or wants to prepare a template before building slides.
-compatibility: Requires Python 3.12+, uv, and agent-slides in the current workspace.
+compatibility: Requires Python 3.12+ and uv.
 ---
 
 # Slides Extract
@@ -34,10 +34,10 @@ All subsequent commands and outputs go in this directory.
 
 ### Step 2) Run extraction
 
-Use `uv run slides docs method:extract` to verify the current contract, then:
+Use `uvx --from git+https://github.com/mpuig/agent-slides slides docs method:extract` to verify the current contract, then:
 
 ```bash
-uv run slides extract <template_or_sample.pptx> \
+uvx --from git+https://github.com/mpuig/agent-slides slides extract <template_or_sample.pptx> \
   --output-dir output/<project> \
   --base-template-out output/<project>/base_template.pptx \
   --compact
@@ -99,7 +99,7 @@ If the extraction produced an `icons/` directory with `.xml` files, add `"icon_p
 
 **Only add fields listed above or in the schema.** The profile uses `extra="forbid"` — any unknown field (e.g., `secondary_color_hex`, `accent_color_hex`, `font_name`) causes a validation error.
 
-Use `uv run slides docs schema:design-profile` for the full schema.
+Use `uvx --from git+https://github.com/mpuig/agent-slides slides docs schema:design-profile` for the full schema.
 
 ## Outputs
 
@@ -110,7 +110,7 @@ This skill produces the project directory consumed by all other slides skills:
 
 ## Error Handling
 
-On any slides error, run `uv run slides docs method:extract` to verify the current contract before retrying.
+On any slides error, run `uvx --from git+https://github.com/mpuig/agent-slides slides docs method:extract` to verify the current contract before retrying.
 
 ## Acceptance Criteria
 

@@ -1,7 +1,7 @@
 ---
 name: slides-audit
 description: Run technical quality checks on an existing deck. Finds and fixes font size violations, shape overlaps, contrast issues, missing sources, and layout compliance problems. Use when the user says "check the deck for issues", "run QA", "lint the slides", "are there any formatting problems", "audit the presentation", or wants to verify visual quality before sharing.
-compatibility: Requires Python 3.12+, uv, and agent-slides in the current workspace.
+compatibility: Requires Python 3.12+ and uv.
 ---
 
 # Slides Audit
@@ -46,13 +46,13 @@ All subsequent commands run from within the project directory.
 Run lint and inspection in parallel:
 
 ```bash
-uv run slides lint output.pptx --profile design-profile.json --out lint.json --compact
+uvx --from git+https://github.com/mpuig/agent-slides slides lint output.pptx --profile design-profile.json --out lint.json --compact
 
-uv run slides inspect output.pptx --page-all --ndjson --compact
+uvx --from git+https://github.com/mpuig/agent-slides slides inspect output.pptx --page-all --ndjson --compact
 
-uv run slides validate output.pptx --compact
+uvx --from git+https://github.com/mpuig/agent-slides slides validate output.pptx --compact
 
-uv run slides inspect output.pptx --summary --compact
+uvx --from git+https://github.com/mpuig/agent-slides slides inspect output.pptx --summary --compact
 ```
 
 ### Step 2) Analyze findings
@@ -107,13 +107,13 @@ For slides with `SHAPE_OVERLAP` warnings:
 Write `audit-fixes.json` with patch ops:
 
 ```bash
-uv run slides apply output.pptx --ops-json @audit-fixes.json --output output.pptx --compact
+uvx --from git+https://github.com/mpuig/agent-slides slides apply output.pptx --ops-json @audit-fixes.json --output output.pptx --compact
 ```
 
 ### Step 6) Re-run QA
 
 ```bash
-uv run slides qa output.pptx --profile design-profile.json --out qa.json --compact
+uvx --from git+https://github.com/mpuig/agent-slides slides qa output.pptx --profile design-profile.json --out qa.json --compact
 ```
 
 ### Step 7) Report
@@ -177,7 +177,7 @@ These are the most impactful technical issues (from the full ranked list):
 
 ## Error Handling
 
-On any slides error, run `uv run slides docs method:inspect` or `uv run slides docs method:edit` to verify the current contract.
+On any slides error, run `uvx --from git+https://github.com/mpuig/agent-slides slides docs method:inspect` or `uvx --from git+https://github.com/mpuig/agent-slides slides docs method:edit` to verify the current contract.
 
 ## Acceptance Criteria
 

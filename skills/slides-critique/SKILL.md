@@ -1,7 +1,7 @@
 ---
 name: slides-critique
 description: Review an existing deck for storytelling quality, visual hierarchy, and content effectiveness. Identifies weak action titles, MECE violations, isomorphism mismatches, and density issues. Use when the user says "review my deck", "critique the presentation", "are the slides telling a good story", "check the narrative flow", "improve the slide titles", or wants feedback on content quality rather than technical formatting.
-compatibility: Requires Python 3.12+, uv, and agent-slides in the current workspace.
+compatibility: Requires Python 3.12+ and uv.
 ---
 
 # Slides Critique
@@ -46,7 +46,7 @@ All subsequent commands run from within the project directory.
 ### Step 1) Read deck content
 
 ```bash
-uv run slides inspect output.pptx --page-all --compact \
+uvx --from git+https://github.com/mpuig/agent-slides slides inspect output.pptx --page-all --compact \
   --fields slides.slide_index,slides.title,slides.layout_name,slides.shapes.text,slides.shapes.font_sizes_pt,slides.shapes.kind
 ```
 
@@ -139,7 +139,7 @@ These questions force deeper thinking about whether the deck truly makes its cas
 **Text fixes** (action titles, copy improvements):
 
 ```bash
-uv run slides edit output.pptx --query "Market Overview" \
+uvx --from git+https://github.com/mpuig/agent-slides slides edit output.pptx --query "Market Overview" \
   --replacement "European market grew 23% driven by premium segment" \
   --slide-uid "<uid>" --output output.pptx --compact
 ```
@@ -149,7 +149,7 @@ uv run slides edit output.pptx --query "Market Overview" \
 Write `critique-fixes.json` with ops, then:
 
 ```bash
-uv run slides apply output.pptx --ops-json @critique-fixes.json --output output.pptx --compact
+uvx --from git+https://github.com/mpuig/agent-slides slides apply output.pptx --ops-json @critique-fixes.json --output output.pptx --compact
 ```
 
 ### Step 7) Report structural issues
@@ -165,7 +165,7 @@ Report these to the user with specific recommendations.
 ### Step 8) Re-run QA
 
 ```bash
-uv run slides qa output.pptx --profile design-profile.json --out qa.json --compact
+uvx --from git+https://github.com/mpuig/agent-slides slides qa output.pptx --profile design-profile.json --out qa.json --compact
 ```
 
 ## Scoring
@@ -211,7 +211,7 @@ Requires Rebuild
 
 ## Error Handling
 
-On any slides error, run `uv run slides docs method:edit` to verify the current contract.
+On any slides error, run `uvx --from git+https://github.com/mpuig/agent-slides slides docs method:edit` to verify the current contract.
 
 ## Acceptance Criteria
 
