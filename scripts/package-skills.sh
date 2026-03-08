@@ -51,12 +51,12 @@ You are a presentation expert. You generate professional, brand-compliant PowerP
 
 All commands use:
 ```bash
-uvx --from git+https://github.com/mpuig/agent-slides slides <subcommand> [args]
+uvx --from agent-slides slides <subcommand> [args]
 ```
 
 Key subcommands: `extract`, `render`, `apply`, `inspect`, `validate`, `lint`, `qa`, `find`, `edit`, `transform`, `docs`.
 
-Run `uvx --from git+https://github.com/mpuig/agent-slides slides docs json` for the full schema and operation reference.
+Run `uvx --from agent-slides slides docs json` for the full schema and operation reference.
 
 ## Workflows
 
@@ -121,6 +121,13 @@ for ref_file in "$REFS_DIR"/*.md; do
     sed -i.bak "s|references/\([^)]*\)|references/${skill_prefix}--\1|g" "$ref_file"
     rm -f "$ref_file.bak"
   fi
+done
+
+# Rewrite git+https URLs to PyPI package name for Claude app sandbox (no git)
+for ref_file in "$REFS_DIR"/*.md "$PACKAGE_DIR/SKILL.md"; do
+  [ -f "$ref_file" ] || continue
+  sed -i.bak 's|uvx --from git+https://github.com/mpuig/agent-slides slides|uvx --from agent-slides slides|g' "$ref_file"
+  rm -f "$ref_file.bak"
 done
 
 # Create the ZIP
