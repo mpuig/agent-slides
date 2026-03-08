@@ -3,7 +3,10 @@ name: Deploy website
 on:
   push:
     branches: [main]
-    paths: [website/**]
+    paths:
+      - website/**
+      - skills/**
+      - scripts/package-skills.sh
   workflow_dispatch:
 
 permissions:
@@ -23,6 +26,8 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+      - name: Package skills as ZIPs
+        run: bash scripts/package-skills.sh
       - name: Configure Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
