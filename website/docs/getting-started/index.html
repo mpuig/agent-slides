@@ -21,7 +21,7 @@
           <a href="/docs" class="active">Docs</a>
           <a href="/examples">Examples</a>
           <a href="/notes">Notes</a>
-          <a href="https://pypi.org/project/agent-slides/" class="nav-cta">PyPI</a>
+          <a href="https://github.com/mpuig/agent-slides" class="nav-cta">GitHub</a>
         </div>
         <button class="mobile-toggle" aria-label="Menu" aria-expanded="false" onclick="this.setAttribute('aria-expanded',this.getAttribute('aria-expanded')==='false'?'true':'false');document.querySelector('.nav-links').classList.toggle('open')">
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 5h14M3 10h14M3 15h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
@@ -43,17 +43,27 @@
 
             <h2 id="install">Install</h2>
 
-            <pre><code><span class="c"># with uv (recommended)</span>
-uv add agent-slides
+            <h3>Claude app (desktop &amp; web)</h3>
 
-<span class="c"># or with pip</span>
-pip install agent-slides</code></pre>
+            <p>Download the skill ZIP and upload it in <strong>Customize &gt; Skills</strong>:</p>
 
-            <p>If you're using Claude Code, symlink the skill files so the agent can discover them:</p>
+            <pre><code><a href="/downloads/agent-slides.zip" style="color:inherit">Download agent-slides.zip</a></code></pre>
 
-            <pre><code>ln -s skills .claude/skills</code></pre>
+            <h3>Coding agents (Claude Code, Cursor, Gemini CLI, Codex)</h3>
 
-            <p>This gives your agent access to seven composable skills &mdash; from template extraction to full pipeline orchestration. You can verify everything is wired up by running <code>slides version</code>.</p>
+            <pre><code>npx skills add https://github.com/mpuig/agent-slides</code></pre>
+
+            <p>This clones the repo, lets you pick which skills to install, and sets them up for your agent. Skills call the CLI via <code>uvx</code>, which auto-installs the Python package in an isolated environment on first run &mdash; no manual <code>pip install</code> needed.</p>
+
+            <h3>Manual setup</h3>
+
+            <pre><code><span class="c"># Clone the repo</span>
+git clone https://github.com/mpuig/agent-slides.git
+
+<span class="c"># Symlink skills into your agent's skill directory</span>
+ln -s agent-slides/skills/* .claude/skills/</code></pre>
+
+            <p>Requires <a href="https://docs.astral.sh/uv/">uv</a> to be available in your environment. The skills invoke the CLI via <code>uvx --from git+https://github.com/mpuig/agent-slides slides</code>, which resolves and caches the package automatically.</p>
 
             <h2 id="prepare">Prepare your template</h2>
 
@@ -73,7 +83,8 @@ pip install agent-slides</code></pre>
 
             <p>You can also run extraction directly from the CLI:</p>
 
-            <pre><code>slides extract "template.pptx" --output-dir project/</code></pre>
+            <pre><code>uvx --from git+https://github.com/mpuig/agent-slides \
+  slides extract "template.pptx" --output-dir project/</code></pre>
 
             <h2 id="build">Build your first deck</h2>
 
@@ -128,7 +139,10 @@ pip install agent-slides</code></pre>
 
             <h3>Key commands</h3>
 
-            <pre><code><span class="c"># Render a slides.json into a .pptx</span>
+            <pre><code><span class="c"># Shorthand: alias the CLI</span>
+alias slides='uvx --from git+https://github.com/mpuig/agent-slides slides'
+
+<span class="c"># Render a slides.json into a .pptx</span>
 slides render --slides-json @slides.json \
   --profile project/design-profile.json \
   --output deck.pptx
@@ -159,8 +173,8 @@ slides edit deck.pptx \
             <p>Gate deck quality in your pipeline with exit codes &mdash; <code>0</code> means all clear, non-zero means violations found:</p>
 
             <pre><code>slides validate deck.pptx || exit 1
-slides lint deck.pptx --profile dp.json --out lint.json --compact
-slides qa deck.pptx --profile dp.json --out qa.json --compact</code></pre>
+slides lint deck.pptx --profile dp.json --out lint.json
+slides qa deck.pptx --profile dp.json --out qa.json</code></pre>
 
           </div>
 
@@ -194,7 +208,7 @@ slides qa deck.pptx --profile dp.json --out qa.json --compact</code></pre>
           </div>
           <div class="footer-col">
             <div class="footer-col-title">Links</div>
-            <a href="https://pypi.org/project/agent-slides/">PyPI</a>
+            <a href="https://github.com/mpuig/agent-slides">GitHub</a>
           </div>
         </div>
       </div>
