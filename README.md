@@ -6,7 +6,7 @@ Agent skill for generating professional PowerPoint decks. 7 composable skills, a
 
 ## Why agent-slides?
 
-Every AI agent can write text, but generating a polished, brand-compliant PowerPoint deck requires workflow knowledge that doesn't fit in a system prompt: when to dry-run, how to chain extraction → build → QA stages, how to recover from validation errors.
+Every AI agent can write text, but generating a polished, brand-compliant PowerPoint deck requires workflow knowledge that doesn't fit in a system prompt: when to preflight a project, when to dry-run, how to chain extraction → build → QA stages, how to recover from validation errors.
 
 agent-slides encodes that knowledge in 7 composable skills, backed by a CLI that speaks JSON and a Python API that wraps `python-pptx` into a deterministic, agent-safe layer.
 
@@ -22,7 +22,7 @@ agent-slides encodes that knowledge in 7 composable skills, backed by a CLI that
 | [slides-audit](skills/slides-audit/SKILL.md) | `/slides-audit` | Technical lint: fonts, overlap, contrast |
 | [slides-critique](skills/slides-critique/SKILL.md) | `/slides-critique` | Storytelling: action titles, MECE, hierarchy |
 | [slides-polish](skills/slides-polish/SKILL.md) | `/slides-polish` | Final pass: notes, metadata, sources |
-| [slides-full](skills/slides-full/SKILL.md) | `/slides-full` | End-to-end: extract → build → audit → critique → polish |
+| [slides-full](skills/slides-full/SKILL.md) | `/slides-full` | End-to-end: extract → preflight → build → audit → critique → polish |
 
 ### The CLI
 
@@ -30,6 +30,7 @@ Skills call `uvx --from agent-slides slides ...` under the hood. The CLI provide
 
 - Declarative JSON operations with dry-run and transactional rollback
 - Template extraction (layouts, archetypes, color zones, icons)
+- Project preflight checks for extracted contracts, profile paths, icon packs, asset roots, and optional deps
 - Validation, linting, and QA with design profiles
 - Agent-optimized output (compact JSON, pagination, field masking)
 - Runtime schema discovery (`uvx --from agent-slides slides docs json`)
@@ -62,6 +63,9 @@ uvx --from agent-slides slides render --slides-json @slides.json --profile desig
 # Extract template contracts
 uvx --from agent-slides slides extract template.pptx --output-dir extracted
 
+# Preflight the extracted project before render
+uvx --from agent-slides slides preflight --project-dir extracted --profile extracted/design-profile.json
+
 # Validate and lint
 uvx --from agent-slides slides validate out.pptx
 uvx --from agent-slides slides lint out.pptx --profile design-profile.json --out lint.json
@@ -78,9 +82,9 @@ uvx --from agent-slides slides docs schema:slides-document
 ## Typical Workflow
 
 ```
-/slides-extract  →  /slides-build  →  /slides-audit  →  /slides-critique  →  /slides-polish
-                                        ↕               ↕
-                                    /slides-edit  ←  (targeted fixes)
+/slides-extract  →  preflight  →  /slides-build  →  /slides-audit  →  /slides-critique  →  /slides-polish
+                                           ↕              ↕               ↕
+                                      /slides-edit   targeted fixes   targeted fixes
 
 Or use /slides-full to run the entire pipeline in one command.
 ```

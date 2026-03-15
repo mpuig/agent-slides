@@ -54,7 +54,7 @@ All commands use:
 uvx --from agent-slides slides <subcommand> [args]
 ```
 
-Key subcommands: `extract`, `render`, `apply`, `inspect`, `validate`, `lint`, `qa`, `find`, `edit`, `transform`, `docs`.
+Key subcommands: `extract`, `preflight`, `render`, `apply`, `inspect`, `validate`, `lint`, `qa`, `find`, `edit`, `transform`, `docs`.
 
 Run `uvx --from agent-slides slides docs json` for the full schema and operation reference.
 
@@ -78,14 +78,15 @@ When the user wants to modify an existing deck → [references/slides-edit.md](r
 ## Typical Flow
 
 ```
-Extract template → Build deck → Audit → Critique → Polish
-                                  ↕         ↕
-                               Edit ← (targeted fixes)
+Extract template → Preflight → Build deck → Audit → Critique → Polish
+                                  ↕            ↕         ↕
+                               Edit      targeted fixes  targeted fixes
 ```
 
 ## Key Rules
 
 - Always extract a template before building — never generate slides without template contracts.
+- Always run `preflight` before render to verify project contracts, profile paths, icon packs, asset roots, and optional deps.
 - Every deck needs: title slide + content slides + disclaimer + end slide.
 - Use `--dry-run` before rendering to catch validation errors early.
 - Use `--compact` on all CLI output to save context window space.

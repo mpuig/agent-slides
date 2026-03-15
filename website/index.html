@@ -105,8 +105,8 @@
           <div class="workflow-step">
             <div class="workflow-num">02</div>
             <div class="workflow-content">
-              <h3>Build the deck</h3>
-              <p>Describe what you need. <code>/slides-build</code> plans the narrative, selects layouts, and compiles slide operations into your presentation.</p>
+              <h3>Preflight and build</h3>
+              <p>Before render, the workflow verifies project contracts, profile paths, icon packs, and asset roots. Then <code>/slides-build</code> plans the narrative, selects layouts, and compiles slide operations into your presentation.</p>
             </div>
           </div>
           <div class="workflow-connector"></div>
@@ -120,7 +120,7 @@
         </div>
 
         <p class="workflow-note">
-          Or run <code>/slides-full</code> to orchestrate all stages as a single pipeline with retry loops.
+          Or run <code>/slides-full</code> to orchestrate extraction, preflight, render, and review as a single pipeline with retry loops.
         </p>
 
         <div class="workflow-cta">
@@ -203,7 +203,7 @@ npx skills add https://github.com/mpuig/agent-slides
 <span class="c"># Extract your corporate template</span>
 /slides-extract corporate.pptx
 
-<span class="c"># Build a full deck from a brief</span>
+<span class="c"># Build a full deck from a brief (/slides-full runs preflight before render)</span>
 /slides-full "10-slide strategy deck on Q3 growth"</code></pre>
         </div>
         <div class="workflow-cta">

@@ -82,6 +82,11 @@
 
             <p>After extraction, the agent (or the user) writes a <code>design-profile.json</code> that pins font sizes, allowed colors, contrast rules, and the paths to the template and catalog files. This profile flows through every downstream step.</p>
 
+            <p>Before any render, the workflow runs a project preflight to verify that those contracts and paths are actually usable:</p>
+
+            <pre><code>slides preflight --project-dir project/ \
+  --profile project/design-profile.json --compact</code></pre>
+
             <h2 id="planning">Planning: brief to slide structure</h2>
 
             <p>The agent reads the user's brief and the resolved manifest, then generates a <code>slides.json</code> file with two sections:</p>
@@ -117,7 +122,9 @@
 
             <p>The CLI takes the slides.json and produces a PowerPoint file:</p>
 
-            <pre><code>slides render --slides-json @slides.json \
+            <pre><code>slides preflight --project-dir project/ \
+  --profile project/design-profile.json --compact
+slides render --slides-json @slides.json \
   --profile design-profile.json \
   --output output.pptx --compact</code></pre>
 
@@ -152,6 +159,8 @@ slides qa output.pptx --profile design-profile.json \
             <div class="flow-diagram">
               <div class="flow-node">Extract</div>
               <span class="flow-arrow">&rarr;</span>
+              <div class="flow-node">Preflight</div>
+              <span class="flow-arrow">&rarr;</span>
               <div class="flow-node">Build</div>
               <span class="flow-arrow">&rarr;</span>
               <div class="flow-node">Content gate</div>
@@ -172,6 +181,7 @@ slides qa output.pptx --profile design-profile.json \
             <table>
               <tr><th>Phase</th><th>Reads</th><th>Writes</th></tr>
               <tr><td>Extract</td><td>template.pptx</td><td>resolved_manifest.json, base_template.pptx, icons/</td></tr>
+              <tr><td>Preflight</td><td>project directory, design-profile.json</td><td>readiness report</td></tr>
               <tr><td>Build</td><td>resolved_manifest.json, design-profile.json</td><td>slides.json, output.pptx</td></tr>
               <tr><td>Audit</td><td>output.pptx, design-profile.json</td><td>lint.json, qa.json, audit-fixes.json</td></tr>
               <tr><td>Critique</td><td>output.pptx, slides.json</td><td>critique-fixes.json</td></tr>

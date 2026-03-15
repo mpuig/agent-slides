@@ -1,6 +1,6 @@
 ---
 name: slides-full
-description: End-to-end deck pipeline — extract, build, audit, critique, and polish in one pass. Use when the user wants a complete deck from scratch with a template, says "create a full deck", "build me a presentation end to end", "make a polished deck from this template", or provides both a brief and a template and expects a finished, presentation-ready result. Prefer this over chaining individual skills manually.
+description: End-to-end deck pipeline — extract, preflight, build, audit, critique, and polish in one pass. Use when the user wants a complete deck from scratch with a template, says "create a full deck", "build me a presentation end to end", "make a polished deck from this template", or provides both a brief and a template and expects a finished, presentation-ready result. Prefer this over chaining individual skills manually.
 compatibility: Requires Python 3.12+ and uv.
 ---
 
@@ -8,7 +8,7 @@ compatibility: Requires Python 3.12+ and uv.
 
 You are a presentation production manager. Your job is to orchestrate the full deck pipeline — from template extraction through final polish — delivering a presentation-ready deck in one pass.
 
-End-to-end pipeline that chains all slides skills: extract, build, audit, critique, polish.
+End-to-end pipeline that chains all slides skills: extract, preflight, build, audit, critique, polish.
 
 ## When to Use
 
@@ -36,12 +36,13 @@ Use a dynamic state machine, not a fixed linear pipeline.
 State flow:
 
 1. `EXTRACT_OR_REUSE`
-2. `BUILD_OR_UPDATE`
-3. `GLOBAL_CONTENT_CHECK`
-4. `LOCAL_VISUAL_CHECK`
-5. `APPLY_FIXES`
-6. `RECHECK`
-7. `DONE`
+2. `PREFLIGHT`
+3. `BUILD_OR_UPDATE`
+4. `GLOBAL_CONTENT_CHECK`
+5. `LOCAL_VISUAL_CHECK`
+6. `APPLY_FIXES`
+7. `RECHECK`
+8. `DONE`
 
 Transition rule: any failed gate returns to `APPLY_FIXES`, then `RECHECK`.
 
@@ -90,6 +91,16 @@ If any answer is unclear, re-read the manifest before proceeding.
 ```
 
 Add `"icon_pack_dir": "icons"` if extraction produced an `icons/` directory. Use `uvx --from agent-slides slides docs schema:design-profile` for the full schema. Only add fields listed in the schema — the profile uses `extra="forbid"`.
+
+### Step 1.5) Preflight
+
+Before building or reusing any project, verify that the extracted artifacts and profile are usable:
+
+```bash
+uvx --from agent-slides slides preflight --project-dir output/<project> --profile output/<project>/design-profile.json --compact
+```
+
+Do not proceed to render if preflight reports missing contracts, broken profile paths, missing icon packs, invalid asset roots, or dependency errors.
 
 ### Step 2) Build
 
@@ -204,7 +215,7 @@ Report:
 
 ## Error Handling
 
-On any slides error, run `uvx --from agent-slides slides docs method:render` or `uvx --from agent-slides slides docs method:extract` to verify the current contract before retrying.
+On any slides error, run `uvx --from agent-slides slides docs method:preflight`, `uvx --from agent-slides slides docs method:render`, or `uvx --from agent-slides slides docs method:extract` to verify the current contract before retrying.
 
 ## Acceptance Criteria
 
@@ -214,4 +225,5 @@ On any slides error, run `uvx --from agent-slides slides docs method:render` or 
 4. Visual checks are below warning threshold or explicitly waived.
 5. All fixes are traceable via small ops patches.
 6. Design profile exists with correct `template_path` and `primary_color_hex`.
-7. All content slides have action titles (complete sentences).
+7. `slides preflight` reports `"ok": true` before render.
+8. All content slides have action titles (complete sentences).

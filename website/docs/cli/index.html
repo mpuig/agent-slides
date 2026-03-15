@@ -35,7 +35,7 @@
         <div class="article-header">
           <span class="label">Documentation</span>
           <h1>CLI reference.</h1>
-          <p class="section-sub">14 commands, 50+ operation types, 9 chart types, structured errors, and deterministic output.</p>
+          <p class="section-sub">15 commands, 50+ operation types, 9 chart types, structured errors, and deterministic output.</p>
         </div>
 
         <div class="article-layout">
@@ -48,6 +48,7 @@
             <table>
               <tr><th>Command</th><th>Description</th></tr>
               <tr><td><code>extract</code></td><td>Extract template contracts from a .pptx</td></tr>
+              <tr><td><code>preflight</code></td><td>Verify project contracts, profile paths, and optional deps</td></tr>
               <tr><td><code>render</code></td><td>Render a deck from slides.json (plan + ops)</td></tr>
               <tr><td><code>apply</code></td><td>Apply an ops patch to an existing deck</td></tr>
               <tr><td><code>inspect</code></td><td>Inspect deck structure as JSON</td></tr>
@@ -118,6 +119,18 @@ slides docs fields:find</code></pre>
             <p>Writes <code>template_layout.json</code>, <code>content_layout.json</code>, <code>archetypes.json</code>, <code>resolved_manifest.json</code>, <code>slides_manifest.json</code>, <code>slide_analysis.json</code>, and optionally <code>base_template.pptx</code> and <code>icons/</code>.</p>
 
             <p>See <a href="/docs/how-it-works#extraction">How it works: Extraction</a> for what each artifact contains and how they feed into the build step.</p>
+
+            <h2 id="preflight-cmd">slides preflight</h2>
+
+            <pre><code>slides preflight --project-dir &lt;dir&gt; --profile &lt;design-profile.json&gt; [options]</code></pre>
+
+            <table>
+              <tr><th>Option</th><th>Description</th></tr>
+              <tr><td><code>--project-dir</code></td><td>Directory containing extracted contracts and related artifacts (required)</td></tr>
+              <tr><td><code>--profile</code></td><td>Design profile JSON file to validate (required)</td></tr>
+            </table>
+
+            <p>Checks that required extraction artifacts exist, profile-referenced paths resolve, icon packs and asset roots are valid, and optional dependencies needed for preview or render flows are installed. Run it before any dry run or render.</p>
 
             <h2 id="render-cmd">slides render</h2>
 
@@ -202,6 +215,7 @@ slides docs
 slides docs json
 
 <span class="c"># specific method</span>
+slides docs method:preflight
 slides docs method:render
 
 <span class="c"># specific schema</span>

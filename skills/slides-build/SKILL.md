@@ -24,6 +24,8 @@ Generate a complete deck from user intent + extracted template contracts.
 - `design-profile.json` — rendering and lint config
 - `content_layout.json`, `archetypes.json`, `template_layout.json` — also generated but merged into resolved manifest
 
+Before rendering, always run `slides preflight` to verify that the project directory, profile paths, icon pack, asset roots, and optional dependencies are all valid.
+
 ## References
 
 | File | When to load | Content |
@@ -199,19 +201,29 @@ Use `uvx --from agent-slides slides docs schema:slides-document` for full schema
 **Document properties:**
 - `set_core_properties` with `title`, `author`, `subject`.
 
-### Step 3) Dry-run (required)
+### Step 3) Preflight (required)
+
+Run a project preflight before any render attempt:
+
+```bash
+uvx --from agent-slides slides preflight --project-dir . --profile design-profile.json --compact
+```
+
+If preflight reports missing artifacts, broken profile paths, or dependency issues, fix those before continuing.
+
+### Step 4) Dry-run (required)
 
 ```bash
 uvx --from agent-slides slides render --slides-json @slides.json --profile design-profile.json --dry-run --compact
 ```
 
-### Step 4) Render
+### Step 5) Render
 
 ```bash
 uvx --from agent-slides slides render --slides-json @slides.json --profile design-profile.json --output output.pptx --compact
 ```
 
-### Step 5) QA gate (required)
+### Step 6) QA gate (required)
 
 **Read `references/common-mistakes.md` and review the pre-generation checklist.**
 
@@ -249,11 +261,12 @@ Check `resolved_manifest.json` -> archetype -> `resolved_layouts` -> `title_regi
 
 ## Error Handling
 
-On any slides error, run `uvx --from agent-slides slides docs method:render` or `uvx --from agent-slides slides docs schema:slides-document` to verify the current contract before retrying.
+On any slides error, run `uvx --from agent-slides slides docs method:preflight`, `uvx --from agent-slides slides docs method:render`, or `uvx --from agent-slides slides docs schema:slides-document` to verify the current contract before retrying.
 
 ## Acceptance Criteria
 
 1. Output PPTX exists.
 2. `qa.json` reports `"ok": true`.
 3. No unresolved-token or contract-critical issues.
-4. All content slides have action titles (complete sentences).
+4. `slides preflight` reports `"ok": true` before render.
+5. All content slides have action titles (complete sentences).

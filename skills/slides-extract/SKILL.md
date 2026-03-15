@@ -101,6 +101,16 @@ If the extraction produced an `icons/` directory with `.xml` files, add `"icon_p
 
 Use `uvx --from agent-slides slides docs schema:design-profile` for the full schema.
 
+### Step 6) Preflight the project
+
+Before handing the project off to `/slides-build` or `/slides-full`, verify the extracted artifacts and profile:
+
+```bash
+uvx --from agent-slides slides preflight --project-dir output/<project> --profile output/<project>/design-profile.json --compact
+```
+
+If preflight fails, fix the project structure or profile paths before continuing.
+
 ## Outputs
 
 This skill produces the project directory consumed by all other slides skills:
@@ -118,4 +128,5 @@ On any slides error, run `uvx --from agent-slides slides docs method:extract` to
 2. `resolved_manifest.json` contains at least one archetype with resolved layouts.
 3. `base_template.pptx` opens without errors.
 4. `design-profile.json` references `base_template.pptx` and `content_layout.json`.
-5. Comprehension gate questions answered correctly.
+5. `slides preflight` reports `"ok": true`.
+6. Comprehension gate questions answered correctly.

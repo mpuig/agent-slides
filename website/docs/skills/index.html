@@ -58,6 +58,7 @@
               <li>Runs <code>slides extract</code> to analyze layouts, placeholders, color zones, and theme palette</li>
               <li>Answers a comprehension gate: the agent verifies it understood the accent colors, available archetypes, split-panel layouts, and text colors</li>
               <li>Writes a <code>design-profile.json</code> pinning font sizes, allowed colors, template path, and catalog paths</li>
+              <li>Runs <code>slides preflight</code> to verify the extracted project before downstream render steps</li>
             </ol>
 
             <p><strong>Output:</strong></p>
@@ -85,6 +86,7 @@
               <li>Reads <code>resolved_manifest.json</code> and answers a comprehension gate (which layout per archetype, split-panel regions, primary color)</li>
               <li>Generates <code>slides.json</code> with a <code>DeckPlan</code> (narrative arc) and <code>OperationBatch</code> (rendering instructions)</li>
               <li>Conditionally loads reference files: chart-patterns.md only if the plan includes charts, framework-patterns.md only if it includes frameworks, etc.</li>
+              <li>Runs <code>slides preflight</code> to verify contracts, profile paths, icon packs, and asset roots</li>
               <li>Dry-runs the operations to catch errors</li>
               <li>Renders to <code>output.pptx</code></li>
               <li>Runs QA and reviews against 25 common mistakes</li>
@@ -198,7 +200,7 @@
 
             <h2 id="full">/slides-full</h2>
 
-            <p>End-to-end pipeline. Chains extract, build, audit, critique, and polish into a single invocation with a state-machine orchestrator.</p>
+            <p>End-to-end pipeline. Chains extract, preflight, build, audit, critique, and polish into a single invocation with a state-machine orchestrator.</p>
 
             <p><strong>When to use:</strong> User provides a brief and a template and wants a finished, polished result.</p>
 
@@ -207,6 +209,7 @@
             <p><strong>What it does:</strong></p>
             <ol>
               <li><strong>EXTRACT_OR_REUSE</strong> &mdash; checks if contracts already exist on disk. If yes, skips extraction.</li>
+              <li><strong>PREFLIGHT</strong> &mdash; verifies extracted contracts, profile paths, icon packs, asset roots, and optional dependencies.</li>
               <li><strong>BUILD_OR_UPDATE</strong> &mdash; generates slides.json, dry-runs, renders to output.pptx.</li>
               <li><strong>GLOBAL_CONTENT_CHECK</strong> &mdash; runs plan-inspect for storytelling quality. Checks flow, action titles, duplication, role sequencing.</li>
               <li><strong>LOCAL_VISUAL_CHECK</strong> &mdash; runs lint + QA for technical quality. Font sizes, overlaps, contrast, bounds.</li>

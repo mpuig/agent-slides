@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Getting Started &mdash; agent-slides</title>
-    <meta name="description" content="Install agent-slides, extract your template, and build your first presentation in minutes." />
+    <meta name="description" content="Install agent-slides, extract your template, preflight the project, and build your first presentation in minutes." />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -85,13 +85,19 @@ ln -s agent-slides/skills/* .claude/skills/</code></pre>
 
             <pre><code>uvx --from agent-slides slides extract "template.pptx" --output-dir project/</code></pre>
 
+            <p>Before the first render, run a project preflight. This verifies that extracted contracts exist, the design profile points at valid files, the icon pack path resolves, asset roots exist, and optional render dependencies are available.</p>
+
+            <pre><code>uvx --from agent-slides slides preflight \
+  --project-dir project/ \
+  --profile project/design-profile.json --compact</code></pre>
+
             <h2 id="build">Build your first deck</h2>
 
             <p>With your template extracted, you're ready to build. In Claude Code:</p>
 
             <pre><code>/slides-full "10-slide strategy deck on Q3 growth"</code></pre>
 
-            <p>The agent plans a narrative arc, selects layouts from your template contract, renders slide operations into a <code>.pptx</code> file, and runs quality checks automatically. If the QA engine finds issues &mdash; font sizes outside bounds, low contrast, overlapping shapes &mdash; the agent fixes them and rechecks until both gates pass.</p>
+            <p>The agent plans a narrative arc, selects layouts from your template contract, runs preflight, renders slide operations into a <code>.pptx</code> file, and runs quality checks automatically. If the QA engine finds issues &mdash; font sizes outside bounds, low contrast, overlapping shapes &mdash; the agent fixes them and rechecks until both gates pass.</p>
 
             <p>If you want just the build step without the full QA loop:</p>
 
@@ -141,6 +147,10 @@ ln -s agent-slides/skills/* .claude/skills/</code></pre>
             <pre><code><span class="c"># Shorthand: alias the CLI</span>
 alias slides='uvx --from agent-slides slides'
 
+<span class="c"># Verify an extracted project before render</span>
+slides preflight --project-dir project/ \
+  --profile project/design-profile.json --compact
+
 <span class="c"># Render a slides.json into a .pptx</span>
 slides render --slides-json @slides.json \
   --profile project/design-profile.json \
@@ -171,7 +181,8 @@ slides edit deck.pptx \
 
             <p>Gate deck quality in your pipeline with exit codes &mdash; <code>0</code> means all clear, non-zero means violations found:</p>
 
-            <pre><code>slides validate deck.pptx || exit 1
+            <pre><code>slides preflight --project-dir project/ --profile project/design-profile.json || exit 1
+slides validate deck.pptx || exit 1
 slides lint deck.pptx --profile dp.json --out lint.json
 slides qa deck.pptx --profile dp.json --out qa.json</code></pre>
 
