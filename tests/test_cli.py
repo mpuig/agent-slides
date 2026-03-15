@@ -245,6 +245,22 @@ def test_cli_docs_method_render_json(monkeypatch: Any, capsys: Any) -> None:
     assert payload["supports_dry_run"] is True
 
 
+def test_cli_docs_method_preflight_json(monkeypatch: Any, capsys: Any) -> None:
+    monkeypatch.setattr(
+        "sys.argv",
+        [
+            "slides",
+            "docs",
+            "method:preflight",
+        ],
+    )
+    code = main()
+    assert code == 0
+    payload = json.loads(capsys.readouterr().out)
+    assert payload["id"] == "preflight"
+    assert payload["mutates_deck"] is False
+
+
 def test_cli_docs_schema_template_layout(monkeypatch: Any, capsys: Any) -> None:
     monkeypatch.setattr(
         "sys.argv",

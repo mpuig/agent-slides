@@ -4,6 +4,13 @@ import base64
 from pathlib import Path
 
 from slides_cli import OperationBatch, Presentation
+from slides_cli.agentic import (
+    DeckPlan,
+    DesignProfile,
+    SlidePlan,
+    compile_plan_to_operations,
+    lint_design,
+)
 
 
 def test_create_add_text_and_chart_and_save(tmp_path: Path) -> None:
@@ -1210,3 +1217,34 @@ def test_chart_style_axis_options_and_line_style_ops() -> None:
         }
     )
     assert pres.apply_operations(batch).ok
+
+
+def test_lint_skips_structural_slide_visual_rules() -> None:
+    plan = DeckPlan(
+        deck_title="Board Update",
+        brief="Board Update",
+        slides=[
+            SlidePlan(
+                slide_number=1,
+                story_role="title",
+                archetype_id="title_slide",
+                action_title="Board update confirms progress",
+                key_points=["Prepared for quarterly review"],
+            ),
+            SlidePlan(
+                slide_number=2,
+                story_role="closing",
+                archetype_id="end_slide",
+                action_title="Next steps are agreed",
+            ),
+        ],
+    )
+    pres = Presentation.create()
+    report = pres.apply_operations(compile_plan_to_operations(plan))
+    assert report.ok
+
+    lint_report = lint_design(deck_index=pres.inspect(), profile=DesignProfile())
+    issue_codes = {issue["code"] for issue in lint_report["issues"]}
+    assert "MISSING_VISUAL_ELEMENT" not in issue_codes
+    assert "SHAPE_OUT_OF_BOUNDS" not in issue_codes
+    assert "SHAPE_OVERLAP" not in issue_codes

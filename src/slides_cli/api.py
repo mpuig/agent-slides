@@ -2268,6 +2268,8 @@ class Presentation:
                         "shape_uid": shape_uids[shape_index],
                         "name": getattr(shape, "name", None),
                         "kind": self._shape_kind(shape),
+                        "is_placeholder": self._shape_is_placeholder(shape),
+                        "has_fill": self._shape_has_fill(shape),
                         "left": left,
                         "top": top,
                         "width": width,
@@ -2789,9 +2791,26 @@ class Presentation:
             return "table"
         if getattr(shape, "shape_type", None) == MSO_SHAPE_TYPE.PICTURE:
             return "image"
+        if getattr(shape, "shape_type", None) == MSO_SHAPE_TYPE.LINE:
+            return "line"
         if getattr(shape, "has_text_frame", False):
             return "text"
         return "other"
+
+    def _shape_is_placeholder(self, shape: Any) -> bool:
+        with suppress(Exception):
+            return bool(shape.is_placeholder)
+        return False
+
+    def _shape_has_fill(self, shape: Any) -> bool:
+        if getattr(shape, "shape_type", None) == MSO_SHAPE_TYPE.PICTURE:
+            return True
+        element = getattr(shape, "_element", None)
+        xml = getattr(element, "xml", "")
+        return any(
+            token in xml
+            for token in ("<a:solidFill", "<a:gradFill", "<a:pattFill", "<a:blipFill")
+        )
 
     def _shape_text(self, shape: Any) -> str:
         if not getattr(shape, "has_text_frame", False):

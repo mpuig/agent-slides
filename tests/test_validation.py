@@ -6,6 +6,7 @@ from pathlib import Path
 from xml.etree import ElementTree as ET
 
 from slides_cli import Presentation
+from slides_cli.agentic import DesignProfile, verify_assets
 from slides_cli.validator import validate_package_bytes
 
 
@@ -155,3 +156,18 @@ def test_xsd_validation_reports_unrouted_xml_part(tmp_path: Path) -> None:
 
     report = validate_package_bytes(data, xsd_dir=schema_dir, require_xsd=False)
     assert any(issue.code == "XSD_PART_UNROUTED" for issue in report.issues)
+
+
+def test_verify_assets_does_not_treat_pptx_inputs_as_images(tmp_path: Path) -> None:
+    input_path = tmp_path / "deck.pptx"
+    template_path = tmp_path / "template.pptx"
+    input_path.write_bytes(b"deck")
+    template_path.write_bytes(b"template")
+
+    report = verify_assets(
+        profile=DesignProfile(asset_roots=[str(tmp_path)]),
+        input_path=input_path,
+        template_path=template_path,
+    )
+    codes = {issue["code"] for issue in report["issues"]}
+    assert "ASSET_EXTENSION_BLOCKED" not in codes

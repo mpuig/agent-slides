@@ -340,6 +340,108 @@ def compile_plan_to_operations(
     return OperationBatch.model_validate({"operations": operations})
 
 
+def _is_structural_layout_name(layout_name: str) -> bool:
+    token = layout_name.strip().lower()
+    if not token:
+        return False
+    if token == "end" or token.endswith(" end"):
+        return True
+    return any(
+        marker in token
+        for marker in (
+            "title slide",
+            "agenda",
+            "section header",
+            "disclaimer",
+            "quote",
+            "divider",
+            "cover",
+        )
+    )
+
+
+def _is_template_owned_layout_name(layout_name: str) -> bool:
+    token = layout_name.strip().lower()
+    if not token or _is_structural_layout_name(token):
+        return False
+    return any(
+        marker in token
+        for marker in (
+            "green",
+            "gray",
+            "highlight",
+            "arrow",
+            "statement",
+            "one third",
+            "two third",
+            "special",
+            "slice",
+            "panel",
+        )
+    )
+
+
+def _infer_slide_class(slide: dict[str, Any], *, slide_count: int) -> str:
+    layout_name = str(slide.get("layout_name", "")).strip()
+    if _is_structural_layout_name(layout_name):
+        return "structural"
+    shapes = slide.get("shapes", [])
+    if any(str(shape.get("kind", "")).strip().lower() in {"chart", "table"} for shape in shapes):
+        return "data"
+    non_placeholder_shapes = [
+        shape for shape in shapes if not bool(shape.get("is_placeholder", False))
+    ]
+    looks_like_end_slide = (
+        0 < len(non_placeholder_shapes) <= 2
+        and all(
+            str(shape.get("kind", "")).strip().lower() == "text"
+            for shape in non_placeholder_shapes
+        )
+        and all(
+            isinstance(shape.get("top"), (int, float))
+            and isinstance(shape.get("width"), (int, float))
+            and 0.2 <= float(shape.get("top", 0.0)) <= 0.8
+            and float(shape.get("width", 0.0)) >= 6.0
+            for shape in non_placeholder_shapes
+        )
+    )
+    if (
+        layout_name.strip().lower() in {"blank", "title only", "blank slide"}
+        and int(slide.get("slide_index", -1)) == slide_count - 1
+        and looks_like_end_slide
+    ):
+        return "structural"
+    if _is_template_owned_layout_name(layout_name):
+        return "template_owned"
+    return "content"
+
+
+def _shape_counts_as_visual(shape: dict[str, Any]) -> bool:
+    if bool(shape.get("is_placeholder", False)):
+        return False
+    kind = str(shape.get("kind", "")).strip().lower()
+    if kind in {"chart", "table", "image", "line"}:
+        return True
+    if bool(shape.get("has_fill", False)):
+        return True
+    name = str(shape.get("name", "")).strip().lower()
+    return "icon" in name
+
+
+def _shape_participates_in_geometry_checks(shape: dict[str, Any], *, slide_class: str) -> bool:
+    if slide_class == "structural" or bool(shape.get("is_placeholder", False)):
+        return False
+    kind = str(shape.get("kind", "")).strip().lower()
+    text = str(shape.get("text", "")).strip()
+    if text.lower().startswith("source:"):
+        return False
+    if kind in {"chart", "table", "image", "line"}:
+        return True
+    if text:
+        return True
+    return slide_class == "content" and bool(shape.get("has_fill", False))
+
+
 def lint_design(
     *,
     deck_index: dict[str, Any],
@@ -376,12 +478,16 @@ def lint_design(
     if not allowed_fonts and template_fonts:
         allowed_fonts = template_fonts
     searchable_titles: list[str] = []
+    slide_classes: dict[str, int] = {}
+    slide_count = len(slides)
     for slide in slides:
         slide_index = slide.get("slide_index")
         title = str(slide.get("title", "")).strip()
+        slide_class = _infer_slide_class(slide, slide_count=slide_count)
+        slide_classes[slide_class] = slide_classes.get(slide_class, 0) + 1
         if title:
             searchable_titles.append(title.lower())
-        if not title:
+        if not title and slide_class != "structural":
             issues.append(
                 DesignIssue(
                     code="MISSING_SLIDE_TITLE",
@@ -396,11 +502,13 @@ def lint_design(
         visual_shape_count = 0
         has_source_line = False
         has_chart_or_table = False
+        geometry_shapes: list[dict[str, Any]] = []
         for shape in slide.get("shapes", []):
             text = str(shape.get("text", ""))
             has_exception = "[design-exception:" in text.lower()
+            is_source_shape = "source:" in text.lower()
             kind = str(shape.get("kind", "")).strip().lower()
-            if kind in {"chart", "table", "image"}:
+            if _shape_counts_as_visual(shape):
                 visual_shape_count += 1
             if kind in {"chart", "table"}:
                 has_chart_or_table = True
@@ -500,12 +608,16 @@ def lint_design(
                 stripped = line.strip()
                 if _looks_like_bullet(stripped):
                     bullets += 1
-            if all(isinstance(v, (int, float)) for v in (left, top, width, height)):
+            if (
+                all(isinstance(v, (int, float)) for v in (left, top, width, height))
+                and _shape_participates_in_geometry_checks(shape, slide_class=slide_class)
+            ):
                 left_in = float(left)
                 top_in = float(top)
                 width_in = float(width)
                 height_in = float(height)
                 boxes.append((left_in, top_in, left_in + width_in, top_in + height_in))
+                geometry_shapes.append(shape)
                 if not has_exception and deck_w > 0 and deck_h > 0:
                     margin = max(0.0, profile.min_margin_in)
                     if (
@@ -579,7 +691,7 @@ def lint_design(
                 )
 
             for font_size in shape.get("font_sizes_pt", []):
-                if has_exception:
+                if has_exception or is_source_shape:
                     continue
                 if font_size < profile.min_font_size_pt or font_size > profile.max_font_size_pt:
                     issues.append(
@@ -621,7 +733,7 @@ def lint_design(
                         message="Underline text detected.",
                         slide_index=slide_index,
                     )
-                )
+                    )
         if profile.enforce_no_transitions and bool(slide.get("has_transition", False)):
             issues.append(
                 DesignIssue(
@@ -666,7 +778,7 @@ def lint_design(
                         slide_index=slide_index,
                     )
                 )
-        text_overlap_risks = _text_overlap_risks(slide.get("shapes", []), profile.max_overlap_ratio)
+        text_overlap_risks = _text_overlap_risks(geometry_shapes, profile.max_overlap_ratio)
         if text_overlap_risks > 0:
             issues.append(
                 DesignIssue(
@@ -679,7 +791,11 @@ def lint_design(
                     slide_index=slide_index,
                 )
             )
-        imbalance = _visual_imbalance_score(slide.get("shapes", []), deck_w=deck_w, deck_h=deck_h)
+        imbalance = (
+            _visual_imbalance_score(geometry_shapes, deck_w=deck_w, deck_h=deck_h)
+            if slide_class in {"content", "data"}
+            else None
+        )
         if imbalance is not None and imbalance > 0.55:
             issues.append(
                 DesignIssue(
@@ -705,12 +821,16 @@ def lint_design(
                     slide_index=slide_index,
                 )
             )
-        if profile.require_visual_on_content_slides and visual_shape_count <= 0:
+        if (
+            profile.require_visual_on_content_slides
+            and slide_class in {"content", "data"}
+            and visual_shape_count <= 0
+        ):
             issues.append(
                 DesignIssue(
                     code="MISSING_VISUAL_ELEMENT",
                     severity="warning",
-                    message="Slide has no chart/table/image visual element.",
+                    message="Slide has no chart, image, icon, or filled-shape visual element.",
                     slide_index=slide_index,
                 )
             )
@@ -981,6 +1101,7 @@ def lint_design(
         "summary": {
             "by_severity": by_severity,
             "by_code": by_code,
+            "by_slide_class": slide_classes,
         },
         "issues": [issue.to_dict() for issue in issues],
         "profile": profile.model_dump(),
@@ -1251,7 +1372,14 @@ def verify_assets(
     roots = [Path(p).resolve() for p in profile.asset_roots if p.strip()]
     allowed_ext = {ext.lower() for ext in profile.allowed_image_extensions if ext.strip()}
 
-    def check_path(path_value: str, *, op_index: int | None, field_path: str) -> None:
+    def check_path(
+        path_value: str,
+        *,
+        op_index: int | None,
+        field_path: str,
+        enforce_allowed_extensions: bool,
+        missing_severity: str,
+    ) -> None:
         if any(ch in path_value for ch in ["\x00", "\x1f"]):
             issues.append(
                 AssetIssue(
@@ -1275,7 +1403,7 @@ def verify_assets(
                 )
             )
         ext = resolved.suffix.lower()
-        if allowed_ext and ext and ext not in allowed_ext:
+        if enforce_allowed_extensions and allowed_ext and ext and ext not in allowed_ext:
             issues.append(
                 AssetIssue(
                     code="ASSET_EXTENSION_BLOCKED",
@@ -1289,7 +1417,7 @@ def verify_assets(
             issues.append(
                 AssetIssue(
                     code="ASSET_PATH_NOT_FOUND",
-                    severity="warning",
+                    severity=missing_severity,
                     message=f"Asset file does not exist: {resolved}",
                     op_index=op_index,
                     path=field_path,
@@ -1297,23 +1425,49 @@ def verify_assets(
             )
 
     if input_path is not None:
-        check_path(str(input_path), op_index=None, field_path="input")
+        check_path(
+            str(input_path),
+            op_index=None,
+            field_path="input",
+            enforce_allowed_extensions=False,
+            missing_severity="error",
+        )
     if template_path is not None:
-        check_path(str(template_path), op_index=None, field_path="template")
+        check_path(
+            str(template_path),
+            op_index=None,
+            field_path="template",
+            enforce_allowed_extensions=False,
+            missing_severity="error",
+        )
 
     if batch is not None:
         for index, op in enumerate(batch.operations):
             op_name = getattr(op, "op", "")
             if op_name in {"add_image", "add_media"} and hasattr(op, "path"):
-                check_path(str(op.path), op_index=index, field_path=f"{op_name}.path")
+                check_path(
+                    str(op.path),
+                    op_index=index,
+                    field_path=f"{op_name}.path",
+                    enforce_allowed_extensions=True,
+                    missing_severity="warning",
+                )
             if isinstance(op, AddMediaOp) and op.poster_path:
                 check_path(
                     str(op.poster_path),
                     op_index=index,
                     field_path="add_media.poster_path",
+                    enforce_allowed_extensions=True,
+                    missing_severity="warning",
                 )
             if isinstance(op, SetPlaceholderImageOp):
-                check_path(str(op.path), op_index=index, field_path="set_placeholder_image.path")
+                check_path(
+                    str(op.path),
+                    op_index=index,
+                    field_path="set_placeholder_image.path",
+                    enforce_allowed_extensions=True,
+                    missing_severity="warning",
+                )
 
     by_severity: dict[str, int] = {}
     by_code: dict[str, int] = {}
@@ -1690,7 +1844,6 @@ def _compile_slide(
 
     points = slide.key_points or ["TBD"]
     body_idx = _first_placeholder_idx("body")
-    footer_idx = _first_placeholder_idx("footer")
     body_box = _first_placeholder_box("body")
     default_layout_norm = (
         str(template_style.default_layout or "").strip().lower()
@@ -1731,15 +1884,11 @@ def _compile_slide(
         )
 
     def _source_op(source_text: str) -> dict[str, Any]:
-        if use_template_placeholders and footer_idx is not None:
-            return {
-                "op": "set_placeholder_text",
-                "slide_index": slide_index,
-                "placeholder_idx": footer_idx,
-                "text": source_text,
-            }
+        normalized_source = source_text.strip()
+        if normalized_source and not normalized_source.lower().startswith("source:"):
+            normalized_source = f"Source: {normalized_source}"
         return text_op(
-            source_text,
+            normalized_source,
             left=cb_left,
             top=cb_top + cb_height - 0.3,
             width=cb_width,
@@ -2568,7 +2717,7 @@ def _default_chart_style_ops(
             "chart_index": chart_index,
             "visible": True,
             "position": "right",
-            "include_in_layout": False,
+            "include_in_layout": True,
         },
         {
             "op": "set_chart_axis_titles",
@@ -2576,6 +2725,20 @@ def _default_chart_style_ops(
             "chart_index": chart_index,
             "category_title": category_title,
             "value_title": value_title,
+        },
+        {
+            "op": "set_chart_axis_options",
+            "slide_index": slide_index,
+            "chart_index": chart_index,
+            "axis": "category",
+            "font_size": 11,
+        },
+        {
+            "op": "set_chart_axis_options",
+            "slide_index": slide_index,
+            "chart_index": chart_index,
+            "axis": "value",
+            "font_size": 11,
         },
         {
             "op": "set_chart_axis_scale",

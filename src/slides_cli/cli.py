@@ -308,6 +308,22 @@ def _build_parser() -> argparse.ArgumentParser:
     )
     _add_global_options(p)
 
+    # --- preflight ---
+    p = sub.add_parser("preflight", help="Verify project contracts, profile paths, and deps")
+    p.add_argument(
+        "--project-dir",
+        type=Path,
+        default=Path("."),
+        help="Project directory containing extracted contracts and design-profile.json",
+    )
+    p.add_argument(
+        "--require-optional-deps",
+        action="store_true",
+        help="Fail if optional preview/screenshot dependencies are unavailable",
+    )
+    _add_profile_options(p)
+    _add_global_options(p)
+
     # --- docs ---
     p = sub.add_parser("docs", help="Print self-discovery docs")
     p.add_argument(
@@ -351,6 +367,7 @@ def _build_discovery_contract() -> dict[str, Any]:
         "find-payload": {"type": "object"},
         "edit-transform-payload": {"type": "object"},
         "qa-payload": {"type": "object"},
+        "preflight-payload": {"type": "object"},
     }
     methods = [
         {
@@ -521,6 +538,19 @@ def _build_discovery_contract() -> dict[str, Any]:
             "supports_dry_run": False,
         },
         {
+            "id": "preflight",
+            "description": "Verify extracted project artifacts, profile paths, and optional deps.",
+            "cli": "slides preflight --project-dir output/project",
+            "mutates_deck": False,
+            "inputs": ["project-dir", "profile", "profile-json", "require-optional-deps"],
+            "outputs": ["stdout"],
+            "request_schema": "request-envelope",
+            "response_schema": "preflight-payload",
+            "supports_field_masks": True,
+            "supports_pagination": False,
+            "supports_dry_run": False,
+        },
+        {
             "id": "repair",
             "description": "Apply conservative repair to a deck.",
             "cli": "slides repair <deck.pptx> --output out.pptx",
@@ -560,7 +590,7 @@ def _build_discovery_contract() -> dict[str, Any]:
         "commands": [
             "extract", "render", "apply", "inspect", "find",
             "plan-inspect", "validate", "lint", "qa", "edit", "transform",
-            "repair", "docs", "version",
+            "repair", "preflight", "docs", "version",
         ],
         "methods": methods,
         "workflows": workflows,
@@ -3560,6 +3590,57 @@ def _resolve_profile(args: argparse.Namespace) -> tuple[DesignProfile, Path | No
     return profile, profile_source
 
 
+def _preflight_issue(
+    *,
+    code: str,
+    severity: str,
+    message: str,
+    path: str | None = None,
+) -> dict[str, Any]:
+    issue: dict[str, Any] = {
+        "code": code,
+        "severity": severity,
+        "message": message,
+    }
+    if path is not None:
+        issue["path"] = path
+    return issue
+
+
+def _check_preflight_path(
+    *,
+    issues: list[dict[str, Any]],
+    code_prefix: str,
+    path: Path,
+    field_path: str,
+    expect_dir: bool = False,
+    required: bool = True,
+) -> dict[str, Any]:
+    exists = path.exists()
+    if not exists:
+        if required:
+            issues.append(
+                _preflight_issue(
+                    code=f"{code_prefix}_MISSING",
+                    severity="error",
+                    message=f"Missing required path: {path}",
+                    path=field_path,
+                )
+            )
+        return {"ok": not required, "path": str(path), "exists": False}
+    is_valid_type = path.is_dir() if expect_dir else path.is_file()
+    if not is_valid_type:
+        issues.append(
+            _preflight_issue(
+                code=f"{code_prefix}_TYPE",
+                severity="error",
+                message=f"Expected {'directory' if expect_dir else 'file'}: {path}",
+                path=field_path,
+            )
+        )
+    return {"ok": is_valid_type, "path": str(path), "exists": True}
+
+
 def _resolve_icon_pack_dirs(args: argparse.Namespace, profile: DesignProfile | None) -> list[Path]:
     resolved: list[Path] = []
     cli_dir = getattr(args, "icon_pack_dir", None)
@@ -4113,6 +4194,232 @@ def _cmd_repair(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_preflight(args: argparse.Namespace) -> int:
+    fields, ndjson, quiet, compact = _resolve_output_options(args)
+    project_dir = args.project_dir.expanduser().resolve()
+    issues: list[dict[str, Any]] = []
+    artifact_checks: dict[str, dict[str, Any]] = {}
+    dependency_checks: dict[str, dict[str, Any]] = {}
+
+    project_ok = project_dir.exists() and project_dir.is_dir()
+    if not project_ok:
+        issues.append(
+            _preflight_issue(
+                code="PROJECT_DIR_INVALID",
+                severity="error",
+                message=f"Project directory not found: {project_dir}",
+                path="project_dir",
+            )
+        )
+
+    profile: DesignProfile | None = None
+    profile_source: Path | None = None
+    profile_arg = getattr(args, "profile", None)
+    profile_json_arg = getattr(args, "profile_json", None)
+    if profile_arg is None and profile_json_arg is None and project_ok:
+        default_profile = project_dir / "design-profile.json"
+        if default_profile.exists():
+            profile_arg = default_profile
+
+    if isinstance(profile_arg, Path) and not profile_arg.exists():
+        issues.append(
+            _preflight_issue(
+                code="PROFILE_MISSING",
+                severity="error",
+                message=f"Design profile not found: {profile_arg}",
+                path="profile",
+            )
+        )
+    else:
+        profile_args = argparse.Namespace(**vars(args))
+        profile_args.profile = profile_arg
+        profile_args.profile_json = profile_json_arg
+        profile, profile_source = _resolve_profile(profile_args)
+
+    if project_ok:
+        artifact_specs = {
+            "resolved_manifest": ["resolved_manifest.json"],
+            "template_catalog": ["template_catalog.json", "template_layout.json"],
+            "content_layout_catalog": ["content_layout_catalog.json", "content_layout.json"],
+            "archetypes_catalog": ["archetypes.json"],
+        }
+        for artifact_name, candidates in artifact_specs.items():
+            chosen = next(
+                (
+                    project_dir / candidate
+                    for candidate in candidates
+                    if (project_dir / candidate).exists()
+                ),
+                project_dir / candidates[0],
+            )
+            artifact_checks[artifact_name] = _check_preflight_path(
+                issues=issues,
+                code_prefix=artifact_name.upper(),
+                path=chosen,
+                field_path=f"project_dir/{chosen.name}",
+            )
+
+    profile_checks: dict[str, Any] = {
+        "loaded": profile_source is not None or bool(profile_json_arg),
+        "source": str(profile_source) if profile_source is not None else None,
+    }
+    if profile is not None:
+        if not profile_checks["loaded"]:
+            issues.append(
+                _preflight_issue(
+                    code="PROFILE_NOT_PROVIDED",
+                    severity="warning",
+                    message="No design profile was provided or found in the project directory.",
+                    path="profile",
+                )
+            )
+
+        if profile.template_path:
+            profile_checks["template_path"] = _check_preflight_path(
+                issues=issues,
+                code_prefix="TEMPLATE_PATH",
+                path=Path(profile.template_path).expanduser(),
+                field_path="profile.template_path",
+            )
+        else:
+            issues.append(
+                _preflight_issue(
+                    code="TEMPLATE_PATH_MISSING",
+                    severity="error",
+                    message="Design profile is missing template_path.",
+                    path="profile.template_path",
+                )
+            )
+
+        if profile.content_layout_catalog_path:
+            profile_checks["content_layout_catalog_path"] = _check_preflight_path(
+                issues=issues,
+                code_prefix="CONTENT_LAYOUT_CATALOG_PATH",
+                path=Path(profile.content_layout_catalog_path).expanduser(),
+                field_path="profile.content_layout_catalog_path",
+            )
+        else:
+            issues.append(
+                _preflight_issue(
+                    code="CONTENT_LAYOUT_CATALOG_PATH_MISSING",
+                    severity="warning",
+                    message="Design profile is missing content_layout_catalog_path.",
+                    path="profile.content_layout_catalog_path",
+                )
+            )
+
+        if profile.archetypes_catalog_path:
+            profile_checks["archetypes_catalog_path"] = _check_preflight_path(
+                issues=issues,
+                code_prefix="ARCHETYPES_CATALOG_PATH",
+                path=Path(profile.archetypes_catalog_path).expanduser(),
+                field_path="profile.archetypes_catalog_path",
+            )
+
+        if profile.icon_pack_dir:
+            icon_dir = Path(profile.icon_pack_dir).expanduser()
+            icon_check = _check_preflight_path(
+                issues=issues,
+                code_prefix="ICON_PACK_DIR",
+                path=icon_dir,
+                field_path="profile.icon_pack_dir",
+                expect_dir=True,
+            )
+            if icon_dir.exists() and icon_dir.is_dir():
+                icon_count = len(list(icon_dir.glob("*.xml")))
+                icon_check["xml_count"] = icon_count
+                if icon_count == 0:
+                    issues.append(
+                        _preflight_issue(
+                            code="ICON_PACK_EMPTY",
+                            severity="warning",
+                            message=f"Icon pack directory contains no .xml files: {icon_dir}",
+                            path="profile.icon_pack_dir",
+                        )
+                    )
+            profile_checks["icon_pack_dir"] = icon_check
+
+        if profile.asset_roots:
+            roots: list[dict[str, Any]] = []
+            for idx, raw_root in enumerate(profile.asset_roots):
+                roots.append(
+                    _check_preflight_path(
+                        issues=issues,
+                        code_prefix="ASSET_ROOT",
+                        path=Path(raw_root).expanduser(),
+                        field_path=f"profile.asset_roots[{idx}]",
+                        expect_dir=True,
+                    )
+                )
+            profile_checks["asset_roots"] = roots
+
+        asset_report = verify_assets(
+            profile=profile,
+            template_path=(
+                Path(profile.template_path).expanduser() if profile.template_path else None
+            ),
+        )
+        issues.extend(asset_report["issues"])
+
+    optional_tools = {
+        "soffice": "Required for PDF conversion during layout preview and screenshot extraction",
+        "pdftoppm": "Required for PNG rendering during layout preview and screenshot extraction",
+    }
+    optional_severity = "error" if args.require_optional_deps else "warning"
+    for tool_name, description in optional_tools.items():
+        available = shutil.which(tool_name) is not None
+        dependency_checks[tool_name] = {
+            "available": available,
+            "description": description,
+        }
+        if not available:
+            issues.append(
+                _preflight_issue(
+                    code="OPTIONAL_DEPENDENCY_MISSING",
+                    severity=optional_severity,
+                    message=f"{tool_name} is unavailable. {description}",
+                    path=f"dependencies.{tool_name}",
+                )
+            )
+
+    by_severity: dict[str, int] = {}
+    by_code: dict[str, int] = {}
+    for issue in issues:
+        severity = str(issue["severity"])
+        code = str(issue["code"])
+        by_severity[severity] = by_severity.get(severity, 0) + 1
+        by_code[code] = by_code.get(code, 0) + 1
+
+    report = {
+        "ok": not any(issue["severity"] == "error" for issue in issues),
+        "project_dir": str(project_dir),
+        "profile": profile_checks,
+        "checks": {
+            "project_dir": {"ok": project_ok, "path": str(project_dir)},
+            "artifacts": artifact_checks,
+            "optional_dependencies": dependency_checks,
+        },
+        "issue_count": len(issues),
+        "summary": {
+            "by_severity": by_severity,
+            "by_code": by_code,
+        },
+        "issues": issues,
+    }
+    _write_payload(
+        report,
+        payload_name="preflight",
+        path=None,
+        fields=fields,
+        ndjson=ndjson,
+        quiet=quiet,
+        compact=compact,
+    )
+    if not report["ok"]:
+        return 5
+    return 0
+
+
 def _cmd_docs(args: argparse.Namespace) -> int:
     compact = getattr(args, "compact", False)
     contract = _build_discovery_contract()
@@ -4206,6 +4513,7 @@ _COMMAND_DISPATCH: dict[str, Any] = {
     "edit": _cmd_edit,
     "transform": _cmd_transform,
     "repair": _cmd_repair,
+    "preflight": _cmd_preflight,
     "docs": _cmd_docs,
     "version": _cmd_version,
 }
